@@ -4,6 +4,7 @@ import { z } from "zod";
 import { NextResponse } from "next/server";
 import { isRoleAllowed } from "./lib/route-permissions";
 import { routesRedirectAuth } from "./lib/routes-redirect";
+import { UserRoleModel } from "./features/users/models/user.model";
 
 export const authConfig: NextAuthConfig = {
   pages: {
@@ -70,30 +71,28 @@ export const authConfig: NextAuthConfig = {
     async authorized({ auth, request: { nextUrl, url } }) {
       const { pathname } = nextUrl;
       const user = auth?.user;
+      console.log(user);
 
       if (pathname === "/login" && user) {
-        const redirectPath = routesRedirectAuth[user.role];
+        const redirectPath = routesRedirectAuth[user.role as UserRoleModel];
         if (!redirectPath) return true;
         return NextResponse.redirect(new URL(redirectPath, url));
       }
 
       if (pathname === "/register" && user) {
-        const redirectPath = routesRedirectAuth[user.role];
+        const redirectPath = routesRedirectAuth[user.role as UserRoleModel];
         if (!redirectPath) return true;
         return NextResponse.redirect(new URL(redirectPath, url));
       }
 
       const routerPermison = isRoleAllowed(pathname, user?.role);
       if (routerPermison.path && pathname !== "/403") {
-        if (routerPermison.role) {
-          return true;
-        }
-        if (!user) {
-          return false;
-        }
-
+        if (routerPermison.role) return true;
+        if (!user) return false;
         return NextResponse.redirect(new URL("/403", url));
       }
+
+      if (!user && routerPermison.path) return false;
 
       return true;
     },

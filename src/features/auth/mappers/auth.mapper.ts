@@ -8,6 +8,7 @@ export class AuthMapper implements Mapper<AuthEntity, AuthModel> {
   private userRoleMapper = new UserRoleMapper();
 
   toModel(entity: AuthEntity): AuthModel {
+    console.log(entity);
     try {
       const tokenDecoded: TokenEntity = jwtDecode(entity.token);
       return {
@@ -24,6 +25,7 @@ export class AuthMapper implements Mapper<AuthEntity, AuthModel> {
       };
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
+      console.log(error);
       throw new Error("Invalid token");
     }
   }

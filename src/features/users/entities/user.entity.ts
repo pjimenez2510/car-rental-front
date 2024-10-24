@@ -13,6 +13,6 @@ export type UserEntityUpdate = Partial<UserEntity>;
 
 export enum UserRoleEntity {
   Admin = "admin",
-  User = "user",
+  Customer = "customer",
   Employee = "employee",
 }

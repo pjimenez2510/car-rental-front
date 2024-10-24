@@ -1,5 +1,7 @@
-export const routesRedirectAuth: Record<string, string> = {
+import { UserRoleModel } from "@/features/users/models/user.model";
+
+export const routesRedirectAuth: Record<UserRoleModel, string> = {
   admin: "/management/car",
   employee: "/management/car",
-  user: "/",
+  customer: "/management/car",
 };

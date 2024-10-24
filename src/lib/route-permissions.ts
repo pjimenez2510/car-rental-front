@@ -9,7 +9,11 @@ interface RoutesPrivate {
 const routes: RoutesPrivate[] = [
   {
     path: "/management/car",
-    roles: [UserRoleModel.Admin, UserRoleModel.Employee],
+    roles: [
+      UserRoleModel.Admin,
+      UserRoleModel.Employee,
+      UserRoleModel.Customer,
+    ],
   },
   {
     path: "/management/car/list",

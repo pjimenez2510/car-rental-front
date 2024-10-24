@@ -7,8 +7,8 @@ export class UserRoleMapper implements Mapper<UserRoleEntity, UserRoleModel> {
     if (entity === UserRoleEntity.Admin) {
       return UserRoleModel.Admin;
     }
-    if (entity === UserRoleEntity.User) {
-      return UserRoleModel.User;
+    if (entity === UserRoleEntity.Customer) {
+      return UserRoleModel.Customer;
     }
     if (entity === UserRoleEntity.Employee) {
       return UserRoleModel.Employee;
@@ -20,8 +20,8 @@ export class UserRoleMapper implements Mapper<UserRoleEntity, UserRoleModel> {
     if (model === UserRoleModel.Admin) {
       return UserRoleEntity.Admin;
     }
-    if (model === UserRoleModel.User) {
-      return UserRoleEntity.User;
+    if (model === UserRoleModel.Customer) {
+      return UserRoleEntity.Customer;
     }
     if (model === UserRoleModel.Employee) {
       return UserRoleEntity.Employee;

@@ -9,7 +9,7 @@ export interface UserModel {
 
 export enum UserRoleModel {
   Admin = "admin",
-  User = "user",
+  Customer = "customer",
   Employee = "employee",
 }
 

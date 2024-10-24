@@ -31,7 +31,11 @@ const getAllMenuList = (pathname: string) => {
           href: "/management/car",
           label: "Autos",
           active: pathname.startsWith("/management/car"),
-          roles: [UserRoleModel.Admin, UserRoleModel.Employee],
+          roles: [
+            UserRoleModel.Admin,
+            UserRoleModel.Employee,
+            UserRoleModel.Customer,
+          ],
           icon: Car,
           submenus: [
             {

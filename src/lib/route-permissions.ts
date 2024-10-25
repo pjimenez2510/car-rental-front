@@ -1,36 +1,35 @@
-import { UserRoleModel } from "@/features/users/models/user.model";
+import { UserRole } from "@/features/users/models/user.model";
 import { pathToRegexp } from "path-to-regexp";
 
 interface RoutesPrivate {
   path: string;
-  roles: UserRoleModel[];
+  roles: UserRole[];
 }
 
 const routes: RoutesPrivate[] = [
   {
     path: "/management/car",
-    roles: [
-      UserRoleModel.Admin,
-      UserRoleModel.Employee,
-      UserRoleModel.Customer,
-    ],
+    roles: [UserRole.Admin, UserRole.Employee],
   },
   {
     path: "/management/car/list",
-    roles: [UserRoleModel.Admin, UserRoleModel.Employee],
+    roles: [UserRole.Admin, UserRole.Employee],
   },
-
   {
     path: "/management/car/create",
-    roles: [UserRoleModel.Admin, UserRoleModel.Employee],
+    roles: [UserRole.Admin, UserRole.Employee],
   },
   {
     path: "/management/car/edit/:id",
-    roles: [UserRoleModel.Admin, UserRoleModel.Employee],
+    roles: [UserRole.Admin, UserRole.Employee],
   },
   {
     path: "/management/car/maintenance/:id",
-    roles: [UserRoleModel.Admin, UserRoleModel.Employee],
+    roles: [UserRole.Admin, UserRole.Employee],
+  },
+  {
+    path: "/reservation",
+    roles: [UserRole.Customer],
   },
 ];
 
@@ -47,5 +46,5 @@ export function isRoleAllowed(path: string, role?: string): RoleAllowed {
 
   if (!route) return { path: false, role: false };
 
-  return { path: true, role: route.roles.includes(role as UserRoleModel) };
+  return { path: true, role: route.roles.includes(role as UserRole) };
 }

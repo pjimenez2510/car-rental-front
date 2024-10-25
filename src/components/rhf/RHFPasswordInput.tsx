@@ -1,25 +1,30 @@
-import { useFormContext, Controller } from 'react-hook-form'
-import { Label } from '../ui/label'
-import { PasswordInput } from '@/features/auth/presentation/components/password-input'
-
+import { useFormContext, Controller } from "react-hook-form";
+import { Label } from "../ui/label";
+import { PasswordInput } from "@/features/auth/presentation/components/password-input";
 
 interface FormInputProps {
-  name: string
-  label: string
-  type?: string
-  placeholder?: string
+  name: string;
+  label: string;
+  type?: string;
+  placeholder?: string;
 }
 
-const RHFPasswordInput: React.FC<FormInputProps> = ({ name, label, placeholder }) => {
+const RHFPasswordInput: React.FC<FormInputProps> = ({
+  name,
+  label,
+  placeholder,
+}) => {
   const {
     control,
     formState: { errors },
-  } = useFormContext()
+  } = useFormContext();
 
   const getErrorMessage = (name: string): string | undefined => {
-    const error = errors[name]
-    return error && typeof error.message === 'string' ? error.message : undefined
-  }
+    const error = errors[name];
+    return error && typeof error.message === "string"
+      ? error.message
+      : undefined;
+  };
 
   return (
     <div className="w-full">
@@ -27,11 +32,13 @@ const RHFPasswordInput: React.FC<FormInputProps> = ({ name, label, placeholder }
       <Controller
         name={name}
         control={control}
-        render={({ field }) => <PasswordInput {...field} id={name} placeholder={placeholder} />}
+        render={({ field }) => (
+          <PasswordInput {...field} id={name} placeholder={placeholder} />
+        )}
       />
-      {getErrorMessage(name) && <p className="mt-1 max-w-52 text-sm text-red-500">{getErrorMessage(name)}</p>}
+      <p className="text-sm text-red-500">&nbsp;{getErrorMessage(name)}</p>
     </div>
-  )
-}
+  );
+};
 
-export default RHFPasswordInput
+export default RHFPasswordInput;

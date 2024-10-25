@@ -17,7 +17,7 @@ const RegisterForm = () => {
     <>
       <FormProvider {...methods}>
         <form
-          className="flex md:min-w-96 flex-col items-center gap-4"
+          className="flex flex-col items-center  w-full max-w-xl"
           onSubmit={methods.handleSubmit(onSubmit)}
         >
           <RHFInput name="firstName" label="Nombre" placeholder="Nombre" />
@@ -38,7 +38,7 @@ const RegisterForm = () => {
             placeholder="Contraseña"
           />
 
-          <Button disabled={isSubmiting} type="submit">
+          <Button className="my-4" disabled={isSubmiting} type="submit">
             {isSubmiting ? <LoadingSpinner /> : "Registrarse"}
           </Button>
         </form>

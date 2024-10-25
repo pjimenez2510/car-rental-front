@@ -1,18 +1,18 @@
-import { UserRoleModel } from "@/features/users/models/user.model";
+import { UserRole } from "@/features/users/models/user.model";
 import { Car, LucideIcon } from "lucide-react";
 
 type Submenu = {
   href: string;
   label: string;
   active: boolean;
-  roles: UserRoleModel[];
+  roles: UserRole[];
 };
 
 type Menu = {
   href: string;
   label: string;
   active: boolean;
-  roles: UserRoleModel[];
+  roles: UserRole[];
   icon: LucideIcon;
   submenus: Submenu[];
 };
@@ -31,30 +31,26 @@ const getAllMenuList = (pathname: string) => {
           href: "/management/car",
           label: "Autos",
           active: pathname.startsWith("/management/car"),
-          roles: [
-            UserRoleModel.Admin,
-            UserRoleModel.Employee,
-            UserRoleModel.Customer,
-          ],
+          roles: [UserRole.Admin, UserRole.Employee, UserRole.Customer],
           icon: Car,
           submenus: [
             {
               href: "/management/car/list",
               label: "Listar",
               active: pathname.startsWith("/management/car/list"),
-              roles: [UserRoleModel.Admin, UserRoleModel.Employee],
+              roles: [UserRole.Admin, UserRole.Employee],
             },
             {
               href: "/management/car/create",
               label: "Crear",
               active: pathname.startsWith("/management/car/create"),
-              roles: [UserRoleModel.Admin, UserRoleModel.Employee],
+              roles: [UserRole.Admin, UserRole.Employee],
             },
             {
               href: "/management/car/maintenances",
               label: "Mantenimientos",
               active: pathname.startsWith("/management/car/maintenances"),
-              roles: [UserRoleModel.Admin, UserRoleModel.Employee],
+              roles: [UserRole.Admin, UserRole.Employee],
             },
           ],
         },
@@ -64,10 +60,7 @@ const getAllMenuList = (pathname: string) => {
   return allMenus;
 };
 
-export const getMenuList = (
-  pathname: string,
-  role?: UserRoleModel
-): Group[] => {
+export const getMenuList = (pathname: string, role?: UserRole): Group[] => {
   if (!role) return [];
 
   const allMenus = getAllMenuList(pathname);

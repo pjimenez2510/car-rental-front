@@ -17,7 +17,7 @@ const LoginForm = () => {
     <>
       <FormProvider {...methods}>
         <form
-          className="flex flex-col items-center gap-4"
+          className="flex flex-col items-center  w-full max-w-xl"
           onSubmit={methods.handleSubmit(onSubmit)}
         >
           <RHFInput
@@ -25,12 +25,20 @@ const LoginForm = () => {
             label="Email"
             placeholder="ejemplo@ejemplo.com"
           />
-          <RHFPasswordInput
-            name="password"
-            label="Contraseña"
-            placeholder="Contraseña"
-          />
-          <Button disabled={isSubmiting} type="submit">
+          <div className="w-full">
+            <RHFPasswordInput
+              name="password"
+              label="Contraseña"
+              placeholder="Contraseña"
+            />
+            <Link
+              href="/forgot-password"
+              className="text-blue-500 text-sm hover:underline"
+            >
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </div>
+          <Button className="my-4" disabled={isSubmiting} type="submit">
             {isSubmiting ? <LoadingSpinner /> : "Ingresar"}
           </Button>
         </form>

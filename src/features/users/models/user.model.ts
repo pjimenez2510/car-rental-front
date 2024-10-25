@@ -1,18 +1,21 @@
-export interface UserModel {
-  id: string;
+export interface UserBase {
   firstName: string;
   lastName: string;
   username: string;
   email: string;
-  role: UserRoleModel;
 }
 
-export enum UserRoleModel {
+export interface User extends UserBase {
+  id: string;
+  role: UserRole;
+}
+
+export enum UserRole {
   Admin = "admin",
   Customer = "customer",
   Employee = "employee",
 }
 
-export type UserCreate = Omit<UserModel, "id">;
+export type UserCreate = UserBase;
 
-export type UserUpdate = Partial<UserModel>;
+export type UserUpdate = Partial<UserBase>;

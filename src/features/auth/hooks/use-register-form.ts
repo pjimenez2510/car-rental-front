@@ -4,8 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { login } from "../services/actions/login";
-import toast from "react-hot-toast";
 import { AuthDatasourceImpl } from "../services/auth.datasource";
+import { toast } from "sonner";
 
 const schema = z.object({
   firstName: z.string().min(1, "El nombre es requerido"),
@@ -15,7 +15,9 @@ const schema = z.object({
     .string()
     .min(1, "El email es requerido")
     .email("El email no es válido"),
-  password: z.string().min(1, "La contraseña es requerida"),
+  password: z
+    .string()
+    .min(6, "La contraseña debe tener como mínimo 6 carácteres"),
 });
 
 type FormFields = z.infer<typeof schema>;
@@ -45,15 +47,12 @@ export function useRegister() {
         const isLogged = await login(res);
 
         if (!isLogged.ok) {
-          toast.error(isLogged.message);
           return;
         }
         toast.success(isLogged.message);
-        window.location.replace("/");
+        window.location.replace("/management/car");
       })
-      .catch((err) => {
-        toast.error(err.message);
-      });
+      .catch(() => {});
   };
 
   return { onSubmit, methods, isSubmiting: methods.formState.isSubmitting };

@@ -1,5 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { getSession } from "next-auth/react";
+import snakecaseKeys from "snakecase-keys";
+import camelcaseKeys from "camelcase-keys";
+import { toast } from "sonner";
 
 export interface ResponseAPI<T> {
   success: boolean;
@@ -31,8 +34,9 @@ class AxiosClient {
       async (config) => {
         const session = await getSession();
         if (session) {
-          config.headers.Authorization = `Bearer ${session.user.accessToken}`;
+          config.headers.Authorization = session.user.accessToken;
         }
+        config.data = snakecaseKeys(config.data);
         return config;
       },
       (error) => {
@@ -42,9 +46,18 @@ class AxiosClient {
 
     this.axiosInstance.interceptors.response.use(
       (response) => {
+        response.data = camelcaseKeys(response.data);
         return response;
       },
       (error) => {
+        if (typeof window !== "undefined") {
+          console.log(error);
+          toast.error(error?.response?.data?.message, {
+            description: error?.response?.data?.errors,
+          });
+        } else {
+          console.error(error?.response?.data);
+        }
         return Promise.reject(error);
       }
     );

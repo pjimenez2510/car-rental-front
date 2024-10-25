@@ -20,7 +20,7 @@ import { CollapseMenuButton } from "./collapse-menu-button";
 import { getMenuList } from "@/lib/menu-list";
 import { useLogout } from "@/features/auth/hooks/use-logout";
 import { useSession } from "next-auth/react";
-import { UserRoleModel } from "@/features/users/models/user.model";
+import { UserRole } from "@/features/users/models/user.model";
 
 interface MenuProps {
   isOpen: boolean | undefined;
@@ -29,10 +29,7 @@ interface MenuProps {
 export function Menu({ isOpen }: MenuProps) {
   const pathname = usePathname();
   const session = useSession();
-  const menuList = getMenuList(
-    pathname,
-    session.data?.user.role as UserRoleModel
-  );
+  const menuList = getMenuList(pathname, session.data?.user.role as UserRole);
   const { onLogout } = useLogout();
 
   return (

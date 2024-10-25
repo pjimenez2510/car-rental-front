@@ -4,7 +4,7 @@ import { z } from "zod";
 import { NextResponse } from "next/server";
 import { isRoleAllowed } from "./lib/route-permissions";
 import { routesRedirectAuth } from "./lib/routes-redirect";
-import { UserRoleModel } from "./features/users/models/user.model";
+import { UserRole } from "./features/users/models/user.model";
 
 export const authConfig: NextAuthConfig = {
   pages: {
@@ -74,13 +74,13 @@ export const authConfig: NextAuthConfig = {
       console.log(user);
 
       if (pathname === "/login" && user) {
-        const redirectPath = routesRedirectAuth[user.role as UserRoleModel];
+        const redirectPath = routesRedirectAuth[user.role as UserRole];
         if (!redirectPath) return true;
         return NextResponse.redirect(new URL(redirectPath, url));
       }
 
       if (pathname === "/register" && user) {
-        const redirectPath = routesRedirectAuth[user.role as UserRoleModel];
+        const redirectPath = routesRedirectAuth[user.role as UserRole];
         if (!redirectPath) return true;
         return NextResponse.redirect(new URL(redirectPath, url));
       }

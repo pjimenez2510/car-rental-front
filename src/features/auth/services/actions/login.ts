@@ -1,9 +1,9 @@
 "use server";
 
 import { signIn } from "@/auth.config";
-import { AuthModel } from "../../models/auth.model";
+import { Auth } from "../../interfaces/auth.interface";
 
-export const login = async (params: AuthModel) => {
+export const login = async (params: Auth) => {
   try {
     await signIn("credentials", {
       id: params.user.id,

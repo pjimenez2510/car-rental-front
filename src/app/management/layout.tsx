@@ -1,10 +1,18 @@
+import { auth } from "@/auth.config";
+import DashboardPanelLayout from "@/core/layout/content/dashboard-layout";
+import { redirect } from "next/navigation";
 
-import DashboardPanelLayout from '@/core/layout/content/dashboard-layout'
+export default async function DemoLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const sesion = await auth();
+  if (!sesion?.user) redirect("/login");
 
-export default function DemoLayout({ children }: { children: React.ReactNode }) {
   return (
     <DashboardPanelLayout>
       <div>{children}</div>
     </DashboardPanelLayout>
-  )
+  );
 }

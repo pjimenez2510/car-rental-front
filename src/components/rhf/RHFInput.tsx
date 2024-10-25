@@ -1,28 +1,36 @@
-import { useFormContext, Controller } from 'react-hook-form'
-import { Label } from '../ui/label'
-import { Input } from '../ui/input'
+import { useFormContext, Controller } from "react-hook-form";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
 
 interface FormInputProps {
-  name: string
-  label?: string
-  type?: string
-  placeholder?: string
-  disabled?: boolean
+  name: string;
+  label?: string;
+  type?: string;
+  placeholder?: string;
+  disabled?: boolean;
 }
 
-const RHFInput: React.FC<FormInputProps> = ({ name, label, type = 'text', placeholder, disabled = false }) => {
+const RHFInput: React.FC<FormInputProps> = ({
+  name,
+  label,
+  type = "text",
+  placeholder,
+  disabled = false,
+}) => {
   const {
     control,
     formState: { errors },
-  } = useFormContext()
+  } = useFormContext();
 
   const getErrorMessage = (name: string): string | undefined => {
-    const error = errors[name]
-    return error && typeof error.message === 'string' ? error.message : undefined
-  }
+    const error = errors[name];
+    return error && typeof error.message === "string"
+      ? error.message
+      : undefined;
+  };
 
   return (
-    <div className="mt-1 w-full">
+    <div className=" w-full">
       {label && (
         <Label htmlFor={name} className="ml-1 ">
           {label}
@@ -32,12 +40,19 @@ const RHFInput: React.FC<FormInputProps> = ({ name, label, type = 'text', placeh
         name={name}
         control={control}
         render={({ field }) => (
-          <Input {...field} id={name} type={type} placeholder={placeholder} className="mt-1" disabled={disabled} />
+          <Input
+            {...field}
+            id={name}
+            type={type}
+            placeholder={placeholder}
+            disabled={disabled}
+            value={field.value || ""}
+          />
         )}
       />
-      {getErrorMessage(name) && <p className="mt-1 max-w-52 text-sm text-red-500">{getErrorMessage(name)}</p>}
+      <p className="text-sm text-red-500">&nbsp; {getErrorMessage(name)}</p>
     </div>
-  )
-}
+  );
+};
 
-export default RHFInput
+export default RHFInput;

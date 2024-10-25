@@ -20,7 +20,7 @@ import { CollapseMenuButton } from "./collapse-menu-button";
 import { getMenuList } from "@/lib/menu-list";
 import { useLogout } from "@/features/auth/hooks/use-logout";
 import { useSession } from "next-auth/react";
-import { UserRole } from "@/features/users/models/user.model";
+import { UserRole } from "@/features/users/interfaces/user.interface";
 
 interface MenuProps {
   isOpen: boolean | undefined;

@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/core/providers/theme-provider";
 import { AuthProvider } from "@/core/providers/auth.provider";
 import { Toaster } from "@/components/ui/sonner";
+import queryClient from "@/core/infrastructure/react-query/query-client";
+import { QueryClientProvider } from "@tanstack/react-query";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -30,8 +32,10 @@ export default function RootLayout({
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Toaster position="top-right" closeButton={true} />
-          <AuthProvider>{children}</AuthProvider>
+          <QueryClientProvider client={queryClient}>
+            <Toaster position="top-right" closeButton={true} />
+            <AuthProvider>{children}</AuthProvider>
+          </QueryClientProvider>
         </ThemeProvider>
       </body>
     </html>

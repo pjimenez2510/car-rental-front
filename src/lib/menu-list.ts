@@ -1,4 +1,4 @@
-import { UserRole } from "@/features/users/models/user.model";
+import { UserRole } from "@/features/users/interfaces/user.interface";
 import { Car, LucideIcon } from "lucide-react";
 
 type Submenu = {

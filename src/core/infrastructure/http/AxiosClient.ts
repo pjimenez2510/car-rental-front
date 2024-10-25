@@ -36,7 +36,9 @@ class AxiosClient {
         if (session) {
           config.headers.Authorization = session.user.accessToken;
         }
-        config.data = snakecaseKeys(config.data);
+        if (config.data) {
+          config.data = snakecaseKeys(config.data, { deep: true });
+        }
         return config;
       },
       (error) => {
@@ -46,7 +48,7 @@ class AxiosClient {
 
     this.axiosInstance.interceptors.response.use(
       (response) => {
-        response.data = camelcaseKeys(response.data);
+        response.data = camelcaseKeys(response.data, { deep: true });
         return response;
       },
       (error) => {

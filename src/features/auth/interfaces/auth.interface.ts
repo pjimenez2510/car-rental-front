@@ -1,4 +1,4 @@
-import { User, UserBase } from "@/features/users/models/user.model";
+import { User, UserBase } from "@/features/users/interfaces/user.interface";
 
 export interface Login {
   email: string;

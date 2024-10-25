@@ -4,7 +4,7 @@ import { z } from "zod";
 import { NextResponse } from "next/server";
 import { isRoleAllowed } from "./lib/route-permissions";
 import { routesRedirectAuth } from "./lib/routes-redirect";
-import { UserRole } from "./features/users/models/user.model";
+import { UserRole } from "./features/users/interfaces/user.interface";
 
 export const authConfig: NextAuthConfig = {
   pages: {

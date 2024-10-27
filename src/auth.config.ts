@@ -71,7 +71,6 @@ export const authConfig: NextAuthConfig = {
     async authorized({ auth, request: { nextUrl, url } }) {
       const { pathname } = nextUrl;
       const user = auth?.user;
-      console.log(user);
 
       if (pathname === "/login" && user) {
         const redirectPath = routesRedirectAuth[user.role as UserRole];

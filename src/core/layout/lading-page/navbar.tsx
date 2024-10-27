@@ -49,7 +49,7 @@ export const Navbar = () => {
   const path = usePathname();
   const routes = routeList(path);
   return (
-    <header className="shadow-inner bg-opacity-15 w-full top-0 mx-auto sticky border border-secondary z-40 flex justify-between items-center p-2 bg-card">
+    <header className="shadow-inner bg-opacity-15 w-full top-0 mx-auto sticky border-b-2 border-secondary z-40 flex justify-between items-center p-2 bg-card">
       <div className="container flex items-center justify-between mx-auto">
         <Link href="/" className="font-bold text-lg flex items-center">
           <Image

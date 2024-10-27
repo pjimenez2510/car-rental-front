@@ -28,28 +28,28 @@ const getAllMenuList = (pathname: string) => {
       groupLabel: "Módulos",
       menus: [
         {
-          href: "/management/car",
-          label: "Autos",
-          active: pathname.startsWith("/management/car"),
+          href: "/management/vehicles",
+          label: "Vehículos",
+          active: pathname.startsWith("/management/vehicles"),
           roles: [UserRole.Admin, UserRole.Employee, UserRole.Customer],
           icon: Car,
           submenus: [
             {
-              href: "/management/car/list",
+              href: "/management/vehicles/list",
               label: "Listar",
-              active: pathname.startsWith("/management/car/list"),
+              active: pathname.startsWith("/management/vehicles/list"),
               roles: [UserRole.Admin, UserRole.Employee],
             },
             {
-              href: "/management/car/create",
+              href: "/management/vehicles/create",
               label: "Crear",
-              active: pathname.startsWith("/management/car/create"),
+              active: pathname.startsWith("/management/vehicles/create"),
               roles: [UserRole.Admin, UserRole.Employee],
             },
             {
-              href: "/management/car/maintenances",
+              href: "/management/vehicles/maintenances",
               label: "Mantenimientos",
-              active: pathname.startsWith("/management/car/maintenances"),
+              active: pathname.startsWith("/management/vehicles/maintenances"),
               roles: [UserRole.Admin, UserRole.Employee],
             },
           ],

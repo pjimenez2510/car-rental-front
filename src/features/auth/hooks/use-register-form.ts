@@ -6,6 +6,8 @@ import { z } from "zod";
 import { login } from "../services/actions/login";
 import { AuthDatasourceImpl } from "../services/auth.datasource";
 import { toast } from "sonner";
+import { routesRedirectAuth } from "@/lib/routes-redirect";
+import { useSearchParams } from "next/navigation";
 
 const schema = z.object({
   firstName: z.string().min(1, "El nombre es requerido"),
@@ -23,6 +25,10 @@ const schema = z.object({
 type FormFields = z.infer<typeof schema>;
 
 export function useRegister() {
+  const searchParams = useSearchParams();
+
+  const redirectPath = searchParams.get("callbackUrl");
+
   const methods = useForm<FormFields>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -50,7 +56,8 @@ export function useRegister() {
           return;
         }
         toast.success(isLogged.message);
-        window.location.replace("/management/car");
+        const path = redirectPath ?? routesRedirectAuth[res.user.role];
+        window.location.replace(path);
       })
       .catch(() => {});
   };

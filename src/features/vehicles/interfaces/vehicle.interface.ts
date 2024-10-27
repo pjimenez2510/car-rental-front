@@ -2,7 +2,7 @@ import { VehicleType } from "./vehicle-type.interface";
 
 export interface VehicleBase {
   brand: string;
-  status: VehicleBase;
+  status: VehicleStatus;
   model: string;
   licensePlate: string;
   year: number;

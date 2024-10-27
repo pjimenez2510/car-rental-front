@@ -5,3 +5,7 @@ export interface VehicleTypeBase {
 export interface VehicleType extends VehicleTypeBase {
   id: string;
 }
+
+export type VehicleTypeCreate = VehicleTypeBase;
+
+export type VehicleTypeUpdate = Partial<VehicleTypeBase>;

@@ -1,6 +1,6 @@
 import AxiosClient from "../infrastructure/http/AxiosClient";
 
-type DataResponse<T> = {
+export type DataResponse<T> = {
   [K: string]: T;
 };
 

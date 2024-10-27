@@ -1,15 +1,12 @@
 "use client";
 
-import Link from "next/link";
-
-import { LogOut, User } from "lucide-react";
+import { LogOut } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -23,6 +20,9 @@ import {
 } from "@/components/ui/tooltip";
 import { useSession } from "next-auth/react";
 import { useLogout } from "@/features/auth/hooks/use-logout";
+import { userRoleSpanish } from "@/features/users/constants/user-role-spanish";
+import { UserRole } from "@/features/users/interfaces/user.interface";
+import { Badge } from "@/components/ui/badge";
 
 export function UserNav() {
   const { data } = useSession();
@@ -59,15 +59,12 @@ export function UserNav() {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-between space-x-2">
               <p className="text-sm font-medium leading-none">
                 {firstName} {lastName}
               </p>
 
-              <span className=" bg-red-200 dark:bg-red-600 rounded-full py-0.5 px-2 ">
-                {" "}
-                {role}
-              </span>
+              <Badge>{userRoleSpanish[role as UserRole]}</Badge>
             </div>
             <p className="text-xs leading-none text-muted-foreground">
               {email}
@@ -75,15 +72,7 @@ export function UserNav() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem className="hover:cursor-pointer" asChild>
-            <Link href="/account" className="flex items-center">
-              <User className="mr-3 h-4 w-4 text-muted-foreground" />
-              Account
-            </Link>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuItem className="hover:cursor-pointer">
+        <DropdownMenuItem className="hover:cursor-pointer p-0">
           <Button
             className="flex items-center w-full"
             variant={"outline"}

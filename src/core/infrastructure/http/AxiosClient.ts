@@ -3,6 +3,7 @@ import { getSession } from "next-auth/react";
 import snakecaseKeys from "snakecase-keys";
 import camelcaseKeys from "camelcase-keys";
 import { toast } from "sonner";
+import { getErrors } from "@/lib/getErrors";
 
 export interface ResponseAPI<T> {
   success: boolean;
@@ -39,6 +40,9 @@ class AxiosClient {
         if (config.data) {
           config.data = snakecaseKeys(config.data, { deep: true });
         }
+        if (config.params) {
+          config.params = snakecaseKeys(config.params, { deep: true });
+        }
         return config;
       },
       (error) => {
@@ -53,9 +57,11 @@ class AxiosClient {
       },
       (error) => {
         if (typeof window !== "undefined") {
-          console.log(error);
-          toast.error(error?.response?.data?.message, {
-            description: error?.response?.data?.errors,
+          const message = error?.response?.data?.message;
+          const errors = error?.response?.data?.errors;
+
+          toast.error(message, {
+            description: getErrors(errors),
           });
         } else {
           console.error(error?.response?.data);

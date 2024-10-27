@@ -14,7 +14,7 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: "RentCard",
+  title: "RentCar",
   description: "Gestiona tus rentas de automóvil",
 };
 

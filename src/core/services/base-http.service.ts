@@ -1,4 +1,4 @@
-import AxiosClient from "../infrastructure/http/AxiosClient";
+import AxiosClient from "../infrastructure/http/axios-client";
 
 export type DataResponse<T> = {
   [K: string]: T;

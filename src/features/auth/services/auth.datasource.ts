@@ -5,7 +5,7 @@ import {
   Register,
   AuthResponse,
 } from "../interfaces/auth.interface";
-import AxiosClient from "@/core/infrastructure/http/AxiosClient";
+import AxiosClient from "@/core/infrastructure/http/axios-client";
 import { TokenDecode } from "../interfaces/toke-decode.interface";
 import { EmailGender } from "../interfaces/email-gender.interface";
 import { Recovery } from "../interfaces/recovery.interface";

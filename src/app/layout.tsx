@@ -7,6 +7,7 @@ import { AuthProvider } from "@/core/providers/auth.provider";
 import { Toaster } from "@/components/ui/sonner";
 import queryClient from "@/core/infrastructure/react-query/query-client";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -33,6 +34,8 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools initialIsOpen={false} />
+
             <Toaster position="top-right" closeButton={true} />
             <AuthProvider>{children}</AuthProvider>
           </QueryClientProvider>

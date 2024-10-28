@@ -3,12 +3,16 @@ import { useVehicleFilterStore } from "../../../context/use-vehicle-filter-store
 import TypeVehicle from "./type-vehicle-filter";
 import InputFilter from "./input-filter";
 import YearFilter from "./year-filter";
+import { DateRangeFilter } from "./date-range-filter";
 
 const FiltersVehicle = () => {
   const { setModel, setBrand } = useVehicleFilterStore();
 
   return (
     <>
+      <DateRangeFilter />
+      <Separator />
+
       <TypeVehicle />
       <Separator />
 

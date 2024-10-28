@@ -1,18 +1,19 @@
-"use client"
+"use client";
+import { es } from "date-fns/locale";
+import * as React from "react";
+import { DayPicker } from "react-day-picker";
 
-import * as React from "react"
-import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons"
-import { DayPicker } from "react-day-picker"
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
-
-export type CalendarProps = React.ComponentProps<typeof DayPicker>
+export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  locale = es,
   ...props
 }: CalendarProps) {
   return (
@@ -59,14 +60,15 @@ function Calendar({
         day_hidden: "invisible",
         ...classNames,
       }}
+      locale={locale}
       components={{
         IconLeft: () => <ChevronLeftIcon className="h-4 w-4" />,
         IconRight: () => <ChevronRightIcon className="h-4 w-4" />,
       }}
       {...props}
     />
-  )
+  );
 }
-Calendar.displayName = "Calendar"
+Calendar.displayName = "Calendar";
 
-export { Calendar }
+export { Calendar };

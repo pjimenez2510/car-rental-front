@@ -33,9 +33,16 @@ const CardVehicle = ({ vehicle }: { vehicle: Vehicle }) => {
           </div>
         </CardContent>
         <CardFooter className="flex justify-end gap-2">
-          <span className="text-lg">
-            20 $ <span className="text-base text-muted-foreground">/día</span>
-          </span>
+          {vehicle.rateInformation ? (
+            <span className="text-lg">
+              {vehicle?.rateInformation?.dailyRate}$
+              <span className="text-base text-muted-foreground">/día</span>
+            </span>
+          ) : (
+            <span className="text-base text-muted-foreground">
+              Selecciona un rango de fechas
+            </span>
+          )}
         </CardFooter>
       </Card>
     </Link>

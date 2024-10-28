@@ -1,3 +1,4 @@
+import { RateInformation } from "./rate-information.interface";
 import { VehicleType } from "./vehicle-type.interface";
 
 export interface VehicleBase {
@@ -11,6 +12,7 @@ export interface VehicleBase {
 export interface Vehicle extends VehicleBase {
   id: string;
   vehicleType: VehicleType;
+  rateInformation: RateInformation;
 }
 
 export interface VehicleCreate extends VehicleBase {

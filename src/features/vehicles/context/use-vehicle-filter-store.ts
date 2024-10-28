@@ -7,10 +7,26 @@ interface VehicleFilterStore {
   setModel: (model: string) => void;
   setYear: (year: string) => void;
   setVehicleType: (checked: boolean, vehicleType: string) => void;
+  setDateRange: (startDate?: Date, endDate?: Date) => void;
 }
 
 export const useVehicleFilterStore = create<VehicleFilterStore>((set) => ({
-  filterParams: {},
+  filterParams: {
+    dateRange: {
+      startDate: new Date(),
+      endDate: new Date(new Date().setDate(new Date().getDate() + 3)),
+    },
+  },
+  setDateRange: (startDate?: Date, endDate?: Date) =>
+    set((state) => ({
+      filterParams: {
+        ...state.filterParams,
+        dateRange: {
+          startDate,
+          endDate,
+        },
+      },
+    })),
   setBrand: (brand: string) =>
     set((state) => ({ filterParams: { ...state.filterParams, brand } })),
   setModel: (model: string) =>

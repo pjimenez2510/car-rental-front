@@ -29,7 +29,7 @@ export default function VehicleCatalogView() {
         </Button>
       </div>
       <div className="flex gap-4">
-        <div className="min-w-60 hidden lg:block">
+        <div className="min-w-72 hidden lg:block">
           <Card className="w-full">
             <CardHeader>
               <h2 className="text-lg font-bold">Filtrar por</h2>

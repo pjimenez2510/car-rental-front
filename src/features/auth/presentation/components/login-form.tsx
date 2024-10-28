@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import RHFInput from "@/components/rhf/RHFInput";
 import RHFPasswordInput from "@/components/rhf/RHFPasswordInput";
-import { useLogin } from "../../hooks/user-login-form";
+import { useLogin } from "../../hooks/use-login-form";
 import Link from "next/link";
 
 const LoginForm = () => {

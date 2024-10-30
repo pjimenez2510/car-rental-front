@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getErrors should match snapshot with multiple errors 1`] = `
+<div>
+  <div>
+    <p>
+      First error message
+    </p>
+    <p>
+      Second error message
+    </p>
+  </div>
+</div>
+`;

@@ -3,9 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
-import { AuthDatasourceImpl } from "../services/auth.datasource";
-import { useRouter, useSearchParams } from "next/navigation";
-import { toast } from "sonner";
+import { useAuthFacade } from "./use-auth-facade";
 
 const schema = z
   .object({
@@ -22,8 +20,7 @@ const schema = z
 type FormFields = z.infer<typeof schema>;
 
 export function useRecoveryForm() {
-  const searhParams = useSearchParams();
-  const router = useRouter();
+  const { recoveryPasswordHandler } = useAuthFacade();
   const methods = useForm<FormFields>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -33,18 +30,7 @@ export function useRecoveryForm() {
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    const token = searhParams.get("reset_password_token");
-    if (!token) {
-      toast.error("El token de reseteo no ha sido probehido");
-      return;
-    }
-    await AuthDatasourceImpl.getInstance()
-      .recoveryPassword({ ...data, resetPasswordToken: token })
-      .then(async (res) => {
-        toast.success(res);
-        router.push("/login");
-      })
-      .catch(() => {});
+    await recoveryPasswordHandler(data);
   };
 
   return { onSubmit, methods, isSubmiting: methods.formState.isSubmitting };

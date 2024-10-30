@@ -8,23 +8,23 @@ interface RoutesPrivate {
 
 const routes: RoutesPrivate[] = [
   {
-    path: "/management/car",
+    path: "/management/vehicles",
     roles: [UserRole.Admin, UserRole.Employee],
   },
   {
-    path: "/management/car/list",
+    path: "/management/vehicles/list",
     roles: [UserRole.Admin, UserRole.Employee],
   },
   {
-    path: "/management/car/create",
+    path: "/management/vehicles/create",
     roles: [UserRole.Admin, UserRole.Employee],
   },
   {
-    path: "/management/car/edit/:id",
+    path: "/management/vehicles/edit/:id",
     roles: [UserRole.Admin, UserRole.Employee],
   },
   {
-    path: "/management/car/maintenance/:id",
+    path: "/management/vehicles/maintenance/:id",
     roles: [UserRole.Admin, UserRole.Employee],
   },
   {

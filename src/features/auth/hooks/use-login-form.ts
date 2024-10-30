@@ -3,11 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
-import { login } from "../services/actions/login";
-import { AuthDatasourceImpl } from "../services/auth.datasource";
-import { toast } from "sonner";
-import { routesRedirectAuth } from "@/lib/routes-redirect";
-import { useSearchParams } from "next/navigation";
+import { useAuthFacade } from "./use-auth-facade";
 
 const schema = z.object({
   email: z
@@ -22,10 +18,7 @@ const schema = z.object({
 type FormFields = z.infer<typeof schema>;
 
 export function useLogin() {
-  const searchParams = useSearchParams();
-
-  const redirectPath = searchParams.get("callbackUrl");
-
+  const { loginHandler } = useAuthFacade();
   const methods = useForm<FormFields>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -35,23 +28,7 @@ export function useLogin() {
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    await AuthDatasourceImpl.getInstance()
-      .login({
-        email: data.email,
-        password: data.password,
-      })
-      .then(async (res) => {
-        const isLogged = await login(res);
-
-        if (!isLogged.ok) {
-          return;
-        }
-
-        toast.success(isLogged.message);
-        const path = redirectPath ?? routesRedirectAuth[res.user.role];
-        window.location.replace(path);
-      })
-      .catch(() => {});
+    await loginHandler(data);
   };
 
   return { onSubmit, methods, isSubmiting: methods.formState.isSubmitting };

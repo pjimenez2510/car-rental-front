@@ -3,7 +3,7 @@ import { getSession } from "next-auth/react";
 import snakecaseKeys from "snakecase-keys";
 import camelcaseKeys from "camelcase-keys";
 import { toast } from "sonner";
-import { getErrors } from "@/lib/getErrors";
+import { getErrors } from "@/lib/get-errors";
 
 export interface ResponseAPI<T> {
   success: boolean;

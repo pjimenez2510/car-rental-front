@@ -1,31 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
-import { toast } from "sonner";
+import { useAuthFacade } from "./use-auth-facade";
 
 export function useLogout() {
-  const router = useRouter();
+  const { logoutHandler } = useAuthFacade();
   const onLogout = async () => {
-    await signOut();
-    toast.success("Sesión cerrada exitosamente");
-    router.push("/login");
-    /* await AuthDatasourceImpl.getInstance()
-      .logout()
-      .then(async (res) => {
-        const isLogged = await logout();
-
-        if (!isLogged.ok) {
-          toast.error(isLogged.message);
-          return;
-        }
-        toast.success(isLogged.message);
-        window.location.replace("/login");
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error(err.message);
-      }); */
+    await logoutHandler();
   };
 
   return { onLogout };

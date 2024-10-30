@@ -10,9 +10,5 @@ export default async function DemoLayout({
   const sesion = await auth();
   if (!sesion?.user) redirect("/login");
 
-  return (
-    <DashboardPanelLayout>
-      <div>{children}</div>
-    </DashboardPanelLayout>
-  );
+  return <DashboardPanelLayout>{children}</DashboardPanelLayout>;
 }

@@ -37,13 +37,12 @@ const RegisterForm = () => {
             label="Contraseña"
             placeholder="Contraseña"
           />
-
           <Button className="my-4" disabled={isSubmiting} type="submit">
             {isSubmiting ? <LoadingSpinner /> : "Registrarse"}
           </Button>
         </form>
         <p className="text-center text-sm">
-          Ya tenés una cuenta?{" "}
+          Ya tenés una cuenta?
           <Link href="/login" className="text-blue-500 hover:underline">
             Inicia sesión
           </Link>

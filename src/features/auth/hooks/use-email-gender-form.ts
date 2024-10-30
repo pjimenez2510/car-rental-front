@@ -3,9 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
-import { AuthDatasourceImpl } from "../services/auth.datasource";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { useAuthFacade } from "./use-auth-facade";
 
 const schema = z.object({
   email: z
@@ -17,7 +15,7 @@ const schema = z.object({
 type FormFields = z.infer<typeof schema>;
 
 export function useEmailGenderForm() {
-  const router = useRouter();
+  const { emailGenderHandler } = useAuthFacade();
   const methods = useForm<FormFields>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -26,13 +24,7 @@ export function useEmailGenderForm() {
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    await AuthDatasourceImpl.getInstance()
-      .emailGender(data)
-      .then(async (res) => {
-        toast.success(res);
-        router.push("/login");
-      })
-      .catch(() => {});
+    await emailGenderHandler(data);
   };
 
   return { onSubmit, methods, isSubmiting: methods.formState.isSubmitting };

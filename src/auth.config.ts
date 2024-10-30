@@ -84,6 +84,18 @@ export const authConfig: NextAuthConfig = {
         return NextResponse.redirect(new URL(redirectPath, url));
       }
 
+      if (pathname === "/reset-password" && user) {
+        const redirectPath = routesRedirectAuth[user.role as UserRole];
+        if (!redirectPath) return true;
+        return NextResponse.redirect(new URL(redirectPath, url));
+      }
+
+      if (pathname === "/forgot-password" && user) {
+        const redirectPath = routesRedirectAuth[user.role as UserRole];
+        if (!redirectPath) return true;
+        return NextResponse.redirect(new URL(redirectPath, url));
+      }
+
       const routerPermison = isRoleAllowed(pathname, user?.role);
       if (routerPermison.path && pathname !== "/403") {
         if (routerPermison.role) return true;

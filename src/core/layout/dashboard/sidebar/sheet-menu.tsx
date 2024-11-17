@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
-import { MenuIcon, PanelsTopLeft } from "lucide-react";
+import { MenuIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/sheet";
 
 import { Menu } from "./menu";
+import Image from "next/image";
 
 export function SheetMenu() {
   return (
@@ -35,7 +36,13 @@ export function SheetMenu() {
             asChild
           >
             <Link href="/quotes" className="flex items-center gap-2">
-              <PanelsTopLeft className="mr-1 h-6 w-6" />
+              <Image
+                src="/images/logo.avif"
+                alt="RentCar"
+                width={40}
+                height={40}
+              />
+
               <h1 className="text-lg font-bold">CarRentar</h1>
             </Link>
           </Button>

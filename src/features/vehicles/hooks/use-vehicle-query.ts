@@ -1,8 +1,6 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { unsubscribe } from "@/lib/unsubscribe";
 import { QUERY_KEYS } from "@/shared/api/query-key";
 import { VehicleService } from "../services/vehicle.service";
 import { VehicleFilterParams } from "../interfaces/vehicle-filter-params.interface";
@@ -13,27 +11,33 @@ export const useVehiclesQuery = () => {
     queryFn: async () => await VehicleService.getInstance().getAll(),
   });
 
-  useEffect(() => {
-    return () => {
-      unsubscribe([QUERY_KEYS.VEHICLES]);
-    };
-  }, []);
-
   return query;
 };
 
 export const useVehiclesByFilterQuery = (params: VehicleFilterParams) => {
+  const enabled = (params: VehicleFilterParams) => {
+    return (
+      !!params.dateRange &&
+      !!params.dateRange?.endDate &&
+      !!params.dateRange?.startDate
+    );
+  };
+
   const query = useQuery({
     queryKey: [QUERY_KEYS.VEHICLES, JSON.stringify(params)],
     queryFn: async () =>
       await VehicleService.getInstance().getAllByFilter(params),
+    enabled: enabled(params),
   });
 
-  useEffect(() => {
-    return () => {
-      unsubscribe([QUERY_KEYS.VEHICLES, JSON.stringify(params)]);
-    };
-  }, [params]);
+  return query;
+};
+
+export const useVehicleByIdQuery = (id: number) => {
+  const query = useQuery({
+    queryKey: [QUERY_KEYS.VEHICLES, String(id)],
+    queryFn: async () => await VehicleService.getInstance().getById(id),
+  });
 
   return query;
 };

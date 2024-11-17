@@ -2,7 +2,7 @@
 import { renderHook, act } from "@testing-library/react";
 import { FormProvider, useForm } from "react-hook-form";
 import { ReactNode } from "react";
-import { useAuthFacade } from "@/features/auth/hooks/use-auth-facade";
+import { useAuthOperations } from "@/features/auth/hooks/use-auth-operations";
 import { useLogin } from "@/features/auth/hooks/use-login-form";
 
 jest.mock("@/features/auth/hooks/use-auth-facade", () => ({
@@ -27,7 +27,7 @@ describe("useLogin hook", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     // Mock de la implementación del hook
-    (useAuthFacade as jest.Mock).mockReturnValue({
+    (useAuthOperations as jest.Mock).mockReturnValue({
       loginHandler: mockLoginHandler,
     });
   });

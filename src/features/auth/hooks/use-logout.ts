@@ -1,9 +1,9 @@
 "use client";
 
-import { useAuthFacade } from "./use-auth-facade";
+import { useAuthOperations } from "./use-auth-operations";
 
 export function useLogout() {
-  const { logoutHandler } = useAuthFacade();
+  const { logoutHandler } = useAuthOperations();
   const onLogout = async () => {
     await logoutHandler();
   };

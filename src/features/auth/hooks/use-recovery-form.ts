@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
-import { useAuthFacade } from "./use-auth-facade";
+import { useAuthOperations } from "./use-auth-operations";
 
 const schema = z
   .object({
@@ -20,7 +20,7 @@ const schema = z
 type FormFields = z.infer<typeof schema>;
 
 export function useRecoveryForm() {
-  const { recoveryPasswordHandler } = useAuthFacade();
+  const { recoveryPasswordHandler } = useAuthOperations();
   const methods = useForm<FormFields>({
     resolver: zodResolver(schema),
     defaultValues: {

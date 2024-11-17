@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
-import { useAuthFacade } from "./use-auth-facade";
+import { useAuthOperations } from "./use-auth-operations";
 
 const schema = z.object({
   email: z
@@ -18,7 +18,7 @@ const schema = z.object({
 type FormFields = z.infer<typeof schema>;
 
 export function useLogin() {
-  const { loginHandler } = useAuthFacade();
+  const { loginHandler } = useAuthOperations();
   const methods = useForm<FormFields>({
     resolver: zodResolver(schema),
     defaultValues: {

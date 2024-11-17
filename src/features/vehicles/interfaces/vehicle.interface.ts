@@ -3,24 +3,28 @@ import { VehicleType } from "./vehicle-type.interface";
 
 export interface VehicleBase {
   brand: string;
-  status: VehicleStatus;
   model: string;
   licensePlate: string;
   year: number;
 }
 
 export interface Vehicle extends VehicleBase {
-  id: string;
+  id: number;
   vehicleType: VehicleType;
+  status: VehicleStatus;
   rateInformation: RateInformation;
 }
 
 export interface VehicleCreate extends VehicleBase {
-  vehicleTypeId: string;
+  vehicleTypeId: number;
 }
 
 export interface VehicleUpdate extends Partial<VehicleBase> {
-  vehicleTypeId: string;
+  vehicleTypeId?: number;
+}
+
+export interface VehicleRequest<T> {
+  vehicle: T;
 }
 
 export enum VehicleStatus {

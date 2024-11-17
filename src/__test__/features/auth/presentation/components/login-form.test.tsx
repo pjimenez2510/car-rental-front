@@ -1,4 +1,4 @@
-import { useAuthFacade } from "@/features/auth/hooks/use-auth-facade";
+import { useAuthOperations } from "@/features/auth/hooks/use-auth-operations";
 import LoginForm from "@/features/auth/presentation/components/login-form";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -12,7 +12,7 @@ describe("LoginForm", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    (useAuthFacade as jest.Mock).mockReturnValue({
+    (useAuthOperations as jest.Mock).mockReturnValue({
       loginHandler: mockLoginHandler,
     });
   });

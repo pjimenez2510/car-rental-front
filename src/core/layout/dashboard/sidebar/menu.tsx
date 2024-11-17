@@ -115,24 +115,23 @@ export function Menu({ isOpen }: MenuProps) {
             <TooltipProvider disableHoverableContent>
               <Tooltip delayDuration={100}>
                 <TooltipTrigger asChild>
-                  <Link
-                    href={"/login"}
-                    className="mt-5 h-10 w-full justify-center"
+                  <Button
+                    variant="outline"
+                    onClick={onLogout}
+                    className="w-full"
                   >
-                    <Button variant="outline" onClick={onLogout}>
-                      <span className={cn(isOpen === false ? "" : "mr-4")}>
-                        <LogOut size={18} />
-                      </span>
-                      <p
-                        className={cn(
-                          "whitespace-nowrap",
-                          isOpen === false ? "hidden opacity-0" : "opacity-100"
-                        )}
-                      >
-                        Cerrar sesión
-                      </p>
-                    </Button>
-                  </Link>
+                    <span className={cn(isOpen === false ? "" : "mr-4")}>
+                      <LogOut size={18} />
+                    </span>
+                    <p
+                      className={cn(
+                        "whitespace-nowrap",
+                        isOpen === false ? "hidden opacity-0" : "opacity-100"
+                      )}
+                    >
+                      Cerrar sesión
+                    </p>
+                  </Button>
                 </TooltipTrigger>
                 {isOpen === false && (
                   <TooltipContent side="right">Cerrar sesión</TooltipContent>

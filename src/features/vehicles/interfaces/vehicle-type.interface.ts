@@ -3,7 +3,7 @@ export interface VehicleTypeBase {
 }
 
 export interface VehicleType extends VehicleTypeBase {
-  id: string;
+  id: number;
 }
 
 export type VehicleTypeCreate = VehicleTypeBase;

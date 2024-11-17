@@ -35,8 +35,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <QueryClientProvider client={queryClient}>
             <ReactQueryDevtools initialIsOpen={false} />
-
-            <Toaster position="top-right" closeButton={true} />
+            <Toaster position="top-right" closeButton richColors />
             <AuthProvider>{children}</AuthProvider>
           </QueryClientProvider>
         </ThemeProvider>

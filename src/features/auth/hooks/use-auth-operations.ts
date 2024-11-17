@@ -1,4 +1,4 @@
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AuthDatasourceImpl } from "../services/auth.datasource";
 import { Login, Register } from "../interfaces/auth.interface";
 import { toast } from "sonner";
@@ -6,11 +6,10 @@ import { routesRedirectAuth } from "@/lib/routes-redirect";
 import { login } from "../services/actions/login";
 import { UserRole } from "@/features/users/interfaces/user.interface";
 import { EmailGender } from "../interfaces/email-gender.interface";
-import { useRouter } from "next/router";
 import { Recovery } from "../interfaces/recovery.interface";
 import { signOut } from "next-auth/react";
 
-export function useAuthFacade() {
+export function useAuthOperations() {
   const authDatasource = AuthDatasourceImpl.getInstance();
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get("callbackUrl");

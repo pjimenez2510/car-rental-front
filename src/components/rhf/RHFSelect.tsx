@@ -37,7 +37,7 @@ const RHFSelect: React.FC<RHFSelectProps> = ({
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full space-y-1">
       <Label htmlFor={name} className="ml-1">
         {label}
       </Label>
@@ -48,7 +48,9 @@ const RHFSelect: React.FC<RHFSelectProps> = ({
           <>
             <Select
               value={field.value}
-              onValueChange={(value) => field.onChange(value)}
+              onValueChange={(value) => {
+                field.onChange(value === "all" ? "" : value);
+              }}
             >
               <SelectTrigger>
                 <SelectValue placeholder={placeholder} />

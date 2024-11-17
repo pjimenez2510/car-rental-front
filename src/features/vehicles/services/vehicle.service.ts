@@ -5,14 +5,15 @@ import {
 import {
   Vehicle,
   VehicleCreate,
+  VehicleRequest,
   VehicleUpdate,
 } from "../interfaces/vehicle.interface";
 import { VehicleFilterParams } from "../interfaces/vehicle-filter-params.interface";
 
 export class VehicleService extends BaseHttpService<
   Vehicle,
-  VehicleCreate,
-  VehicleUpdate
+  VehicleRequest<VehicleCreate>,
+  VehicleRequest<VehicleUpdate>
 > {
   protected baseUrl: string = "api/v1/vehicles";
   protected singleResponseKey: string = "vehicle";

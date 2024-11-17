@@ -30,7 +30,7 @@ const RHFInput: React.FC<FormInputProps> = ({
   };
 
   return (
-    <div className=" w-full">
+    <div className=" w-full space-y-1">
       {label && (
         <Label htmlFor={name} className="ml-1 ">
           {label}

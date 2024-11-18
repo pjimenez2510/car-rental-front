@@ -19,14 +19,17 @@ const TypeVehicle = () => {
           <div key={type.id} className="flex mr-4 mb-2">
             <Checkbox
               key={type.id}
-              id={type.id}
+              id={type.id.toString()}
               checked={filterParams?.vehicleType?.includes(type.name) ?? false}
               onCheckedChange={(checked) => {
                 setVehicleType(!!checked, type.name);
               }}
               className="mr-2"
             />
-            <Label className="hover:cursor-pointer" htmlFor={type.id}>
+            <Label
+              className="hover:cursor-pointer"
+              htmlFor={type.id.toString()}
+            >
               {type.name}
             </Label>
           </div>

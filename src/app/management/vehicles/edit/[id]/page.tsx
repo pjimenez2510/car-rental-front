@@ -1,6 +1,5 @@
 import { ContentLayout } from "@/core/layout/content/content-layout";
 import EditVehicle from "@/features/vehicles/presentation/views/edit-vehicle-view";
-import NewVehicle from "@/features/vehicles/presentation/views/new-vehicle-view";
 
 interface EditPageProps {
   params: {

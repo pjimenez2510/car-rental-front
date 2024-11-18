@@ -25,8 +25,7 @@ interface VehicleFormProps {
 }
 
 export function useVehicleForm({ vehicle }: VehicleFormProps) {
-  const { createVehicle: create, updateVehicle: update } =
-    useVehicleOperations();
+  const { createVehicle, updateVehicle } = useVehicleOperations();
   const router = useRouter();
   const methods = useForm<FormFields>({
     resolver: zodResolver(schema),
@@ -41,7 +40,7 @@ export function useVehicleForm({ vehicle }: VehicleFormProps) {
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     if (vehicle) {
-      await update(
+      await updateVehicle(
         vehicle.id,
         {
           ...data,
@@ -50,7 +49,10 @@ export function useVehicleForm({ vehicle }: VehicleFormProps) {
         vehicle
       );
     } else {
-      await create({ ...data, vehicleTypeId: parseInt(data.vehicleTypeId) });
+      await createVehicle({
+        ...data,
+        vehicleTypeId: parseInt(data.vehicleTypeId),
+      });
     }
   };
 

@@ -15,7 +15,7 @@ const useVehicleOperations = () => {
 
   const createVehicle = async (vehicle: VehicleCreate) => {
     try {
-      vehicleService.create({ vehicle });
+      await vehicleService.create({ vehicle });
       toast.success("Vehículo creado correctamente");
       router.push("/management/vehicles/list");
       invalidateQuery([QUERY_KEYS.VEHICLES]);

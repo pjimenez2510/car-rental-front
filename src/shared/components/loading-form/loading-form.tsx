@@ -7,6 +7,7 @@ interface LoadingFormVehicleProps {
 }
 const LoadingForm = ({
   text = "Cargando formulario...",
+
   quantityInputs = 6,
 }: LoadingFormVehicleProps) => {
   return (

@@ -35,6 +35,7 @@ import {
 import { MoreHorizontal } from "lucide-react";
 import useVehicleOperations from "../../hooks/use-vehicle-operations";
 import { useState } from "react";
+import Image from "next/image";
 
 const TableVehicle = () => {
   const { data: vehicles, isFetching } = useVehiclesQuery();
@@ -65,10 +66,12 @@ const TableVehicle = () => {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>Imagen</TableHead>
               <TableHead>Marca</TableHead>
               <TableHead>Modelo</TableHead>
               <TableHead>Placa</TableHead>
               <TableHead>Tipo</TableHead>
+              <TableHead>Año</TableHead>
               <TableHead>Estado</TableHead>
               <TableHead>Acciones</TableHead>
             </TableRow>
@@ -76,10 +79,20 @@ const TableVehicle = () => {
           <TableBody>
             {vehicles?.map((vehicle) => (
               <TableRow key={vehicle.id}>
+                <TableCell>
+                  <Image
+                    src={vehicle.url || "/images/not-image-vehicle.png"}
+                    alt={`Imagen de ${vehicle.brand} ${vehicle.model}`}
+                    width={50}
+                    height={50}
+                    className="rounded-md"
+                  />
+                </TableCell>
                 <TableCell>{vehicle.brand}</TableCell>
                 <TableCell>{vehicle.model}</TableCell>
                 <TableCell>{vehicle.licensePlate}</TableCell>
                 <TableCell>{vehicle.vehicleType.name}</TableCell>
+                <TableCell>{vehicle.year}</TableCell>
                 <TableCell>
                   <Badge
                     className={cn([vehicleStatusSpanish[vehicle.status].color])}

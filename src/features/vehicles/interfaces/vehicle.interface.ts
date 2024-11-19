@@ -1,4 +1,3 @@
-import { RateInformation } from "./rate-information.interface";
 import { VehicleType } from "./vehicle-type.interface";
 
 export interface VehicleBase {
@@ -6,13 +5,17 @@ export interface VehicleBase {
   model: string;
   licensePlate: string;
   year: number;
+  url?: string;
 }
 
 export interface Vehicle extends VehicleBase {
   id: number;
   vehicleType: VehicleType;
   status: VehicleStatus;
-  rateInformation: RateInformation;
+  lastCheckupDate?: Date;
+  dailyRate?: number;
+  weeklyRate?: number;
+  monthlyRate: number;
 }
 
 export interface VehicleCreate extends VehicleBase {

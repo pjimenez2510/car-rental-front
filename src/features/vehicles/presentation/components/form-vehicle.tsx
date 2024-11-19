@@ -8,6 +8,7 @@ import { Vehicle } from "../../interfaces/vehicle.interface";
 import RHFSelect from "@/components/rhf/RHFSelect";
 import { Save } from "lucide-react";
 import { Option } from "@/shared/interfaces/option.interface";
+import RHFImageInput from "@/components/rhf/RHFImageInput";
 
 interface FormProps {
   vehicle?: Vehicle;
@@ -25,6 +26,7 @@ export const VehicleForm = ({ vehicle, optionsVehicleType }: FormProps) => {
         onSubmit={methods.handleSubmit(onSubmit)}
         className="flex flex-col items-center w-full max-w-xl"
       >
+        <RHFImageInput name="url" label="Imagen" />
         <RHFInput name="brand" label="Marca" />
         <RHFInput name="model" label="Modelo" />
         <RHFInput name="year" label="Año" />

@@ -23,7 +23,7 @@ export class EmailService extends BaseHttpService<
                 }
             );
             
-            return data.status;
+            return data.status!;
         } catch (error: unknown) {
             throw error;
         }

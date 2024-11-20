@@ -15,6 +15,7 @@ const Footer = () => {
                 alt="RentCar logo"
                 className="rounded-full"
                 width={170}
+                priority
                 height={170}
               />
               <div>

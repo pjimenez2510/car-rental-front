@@ -35,9 +35,10 @@ export function SheetMenu() {
             variant="link"
             asChild
           >
-            <Link href="/quotes" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
               <Image
                 src="/images/logo.avif"
+                priority
                 alt="RentCar"
                 width={40}
                 height={40}

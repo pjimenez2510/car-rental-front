@@ -24,11 +24,11 @@ export default function CardVehicle({ vehicle }: VehicleCardProps) {
           <Image
             src={vehicle.url || "/images/not-image-vehicle.png"}
             alt={`${vehicle.brand} ${vehicle.model}`}
-            layout="fill"
-            objectFit="cover"
-            className="transition-transform duration-300 hover:scale-105"
+            width={300}
+            height={200}
+            loading="lazy"
+            className="w-full object-cover h-52 transition-transform duration-300 hover:scale-105"
           />
-          {}
           <Badge
             className={cn(
               "absolute top-2 left-2 bg-primary text-primary-foreground",

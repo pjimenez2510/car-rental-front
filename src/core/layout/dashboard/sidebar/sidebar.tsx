@@ -36,6 +36,7 @@ export function Sidebar() {
           <Link href="/" className="flex items-center gap-2">
             <Image
               src="/images/logo.avif"
+              priority
               alt="RentCar"
               width={40}
               height={40}

@@ -80,13 +80,17 @@ const TableVehicle = () => {
             {vehicles?.map((vehicle) => (
               <TableRow key={vehicle.id}>
                 <TableCell>
-                  <Image
-                    src={vehicle.url || "/images/not-image-vehicle.png"}
-                    alt={`Imagen de ${vehicle.brand} ${vehicle.model}`}
-                    width={50}
-                    height={50}
-                    className="rounded-md"
-                  />
+                  <div className="h-12 w-24">
+                    <Image
+                      src={vehicle.url || "/images/not-image-vehicle.png"}
+                      alt={`Imagen de ${vehicle.brand} ${vehicle.model}`}
+                      width={90}
+                      loading="lazy"
+                      quality={60}
+                      height={90}
+                      className="rounded-md w-full  h-full object-cover"
+                    />
+                  </div>
                 </TableCell>
                 <TableCell>{vehicle.brand}</TableCell>
                 <TableCell>{vehicle.model}</TableCell>

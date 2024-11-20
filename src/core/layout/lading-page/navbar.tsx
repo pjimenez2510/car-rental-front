@@ -73,6 +73,7 @@ export const Navbar = () => {
       <div className="container flex items-center justify-between mx-auto">
         <Link href="/" className="font-bold text-lg flex items-center">
           <Image
+            priority
             src="/images/logo.avif"
             alt="RentCar logo"
             className="rounded-full mr-2"
@@ -142,6 +143,7 @@ export const Navbar = () => {
                   <SheetTitle className="flex items-center">
                     <Link href="/" className="flex items-center">
                       <Image
+                        priority
                         src="/images/logo.avif"
                         alt="RentCar logo"
                         className="rounded-full"

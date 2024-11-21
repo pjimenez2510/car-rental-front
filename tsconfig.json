@@ -27,7 +27,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "jest.setup.ts",
-    "src/__test__/features/auth/presentation/components/login-form.test.jsx",
     "jest.config.ts"
   ],
   "exclude": ["node_modules"]

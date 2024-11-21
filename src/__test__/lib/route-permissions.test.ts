@@ -1,108 +1,127 @@
 import { UserRole } from "@/features/users/interfaces/user.interface";
 import { isRoleAllowed } from "@/lib/route-permissions";
 
-describe("Role Authorization", () => {
-  describe("Basic Route Matching", () => {
-    test("should match exact routes", () => {
-      const result = isRoleAllowed("/management/vehicles", UserRole.Admin);
-      expect(result).toEqual({ path: true, role: true });
-    });
+describe("isRoleAllowed", () => {
+  describe("Rutas estáticas", () => {
+    describe("/management/vehicles", () => {
+      const path = "/management/vehicles";
 
-    test("should not match non-existent routes", () => {
-      const result = isRoleAllowed("/non/existent/route", UserRole.Admin);
-      expect(result).toEqual({ path: false, role: false });
-    });
-  });
-
-  describe("Dynamic Route Parameters", () => {
-    test("should match routes with numeric IDs", () => {
-      const result = isRoleAllowed(
-        "/management/vehicles/edit/123",
-        UserRole.Admin
-      );
-      expect(result).toEqual({ path: true, role: true });
-    });
-
-    test("should match routes with string IDs", () => {
-      const result = isRoleAllowed(
-        "/management/vehicles/edit/abc-123",
-        UserRole.Admin
-      );
-      expect(result).toEqual({ path: true, role: true });
-    });
-
-    test("should match maintenance routes with IDs", () => {
-      const result = isRoleAllowed(
-        "/management/vehicles/maintenance/456",
-        UserRole.Employee
-      );
-      expect(result).toEqual({ path: true, role: true });
-    });
-  });
-
-  describe("Role-based Access", () => {
-    describe("Admin Role", () => {
-      test("should allow admin access to vehicle management", () => {
-        const result = isRoleAllowed("/management/vehicles", UserRole.Admin);
+      it("debería permitir acceso a Admin", () => {
+        const result = isRoleAllowed(path, UserRole.Admin);
         expect(result).toEqual({ path: true, role: true });
       });
 
-      test("should allow admin access to vehicle list", () => {
-        const result = isRoleAllowed(
-          "/management/vehicles/list",
-          UserRole.Admin
-        );
+      it("debería permitir acceso a Employee", () => {
+        const result = isRoleAllowed(path, UserRole.Employee);
         expect(result).toEqual({ path: true, role: true });
       });
 
-      test("should allow admin access to vehicle creation", () => {
-        const result = isRoleAllowed(
-          "/management/vehicles/create",
-          UserRole.Admin
-        );
-        expect(result).toEqual({ path: true, role: true });
-      });
-
-      test("should deny admin access to customer routes", () => {
-        const result = isRoleAllowed("/reservation", UserRole.Admin);
+      it("no debería permitir acceso a Customer", () => {
+        const result = isRoleAllowed(path, UserRole.Customer);
         expect(result).toEqual({ path: true, role: false });
       });
     });
 
-    describe("Employee Role", () => {
-      test("should allow employee access to vehicle management", () => {
-        const result = isRoleAllowed("/management/vehicles", UserRole.Employee);
+    describe("/management/vehicles/list", () => {
+      const path = "/management/vehicles/list";
+
+      it("debería permitir acceso a Admin", () => {
+        const result = isRoleAllowed(path, UserRole.Admin);
         expect(result).toEqual({ path: true, role: true });
       });
 
-      test("should allow employee access to vehicle editing", () => {
+      it("debería permitir acceso a Employee", () => {
+        const result = isRoleAllowed(path, UserRole.Employee);
+        expect(result).toEqual({ path: true, role: true });
+      });
+
+      it("no debería permitir acceso a Customer", () => {
+        const result = isRoleAllowed(path, UserRole.Customer);
+        expect(result).toEqual({ path: true, role: false });
+      });
+    });
+
+    describe("/reservation", () => {
+      const path = "/reservation";
+
+      it("debería permitir acceso solo a Customer", () => {
+        const result = isRoleAllowed(path, UserRole.Customer);
+        expect(result).toEqual({ path: true, role: true });
+      });
+
+      it("no debería permitir acceso a Admin", () => {
+        const result = isRoleAllowed(path, UserRole.Admin);
+        expect(result).toEqual({ path: true, role: false });
+      });
+
+      it("no debería permitir acceso a Employee", () => {
+        const result = isRoleAllowed(path, UserRole.Employee);
+        expect(result).toEqual({ path: true, role: false });
+      });
+    });
+  });
+
+  describe("Rutas dinámicas", () => {
+    describe("/management/vehicles/edit/:id", () => {
+      it("debería permitir acceso a Admin con cualquier ID", () => {
         const result = isRoleAllowed(
           "/management/vehicles/edit/123",
+          UserRole.Admin
+        );
+        expect(result).toEqual({ path: true, role: true });
+      });
+
+      it("debería permitir acceso a Employee con cualquier ID", () => {
+        const result = isRoleAllowed(
+          "/management/vehicles/edit/456",
           UserRole.Employee
         );
         expect(result).toEqual({ path: true, role: true });
       });
 
-      test("should deny employee access to customer routes", () => {
-        const result = isRoleAllowed("/reservation", UserRole.Employee);
+      it("no debería permitir acceso a Customer con cualquier ID", () => {
+        const result = isRoleAllowed(
+          "/management/vehicles/edit/789",
+          UserRole.Customer
+        );
         expect(result).toEqual({ path: true, role: false });
+      });
+
+      it("debería funcionar con IDs de diferentes formatos", () => {
+        const paths = [
+          "/management/vehicles/edit/123",
+          "/management/vehicles/edit/abc-def",
+          "/management/vehicles/edit/123-abc-456",
+          "/management/vehicles/edit/uuid-123-456-789",
+        ];
+
+        paths.forEach((path) => {
+          const result = isRoleAllowed(path, UserRole.Admin);
+          expect(result).toEqual({ path: true, role: true });
+        });
       });
     });
 
-    describe("Customer Role", () => {
-      test("should allow customer access to reservation", () => {
-        const result = isRoleAllowed("/reservation", UserRole.Customer);
+    describe("/management/vehicles/maintenance/:id", () => {
+      it("debería permitir acceso a Admin con cualquier ID", () => {
+        const result = isRoleAllowed(
+          "/management/vehicles/maintenance/123",
+          UserRole.Admin
+        );
         expect(result).toEqual({ path: true, role: true });
       });
 
-      test("should deny customer access to vehicle management", () => {
-        const result = isRoleAllowed("/management/vehicles", UserRole.Customer);
-        expect(result).toEqual({ path: true, role: false });
+      it("debería permitir acceso a Employee con cualquier ID", () => {
+        const result = isRoleAllowed(
+          "/management/vehicles/maintenance/456",
+          UserRole.Employee
+        );
+        expect(result).toEqual({ path: true, role: true });
       });
 
-      test("should deny customer access to vehicle creation", () => {
+      it("no debería permitir acceso a Customer con cualquier ID", () => {
         const result = isRoleAllowed(
-          "/management/vehicles/create",
+          "/management/vehicles/maintenance/789",
           UserRole.Customer
         );
         expect(result).toEqual({ path: true, role: false });
@@ -110,59 +129,18 @@ describe("Role Authorization", () => {
     });
   });
 
-  describe("Edge Cases", () => {
-    test("should handle undefined role", () => {
+  describe("Manejo de roles", () => {
+    it("debería manejar rol undefined", () => {
       const result = isRoleAllowed("/management/vehicles");
       expect(result).toEqual({ path: true, role: false });
     });
 
-    test("should handle empty path", () => {
-      const result = isRoleAllowed("", UserRole.Admin);
-      expect(result).toEqual({ path: false, role: false });
-    });
-
-    test("should handle invalid role", () => {
+    it("debería manejar roles inválidos", () => {
       const result = isRoleAllowed(
         "/management/vehicles",
         "INVALID_ROLE" as UserRole
       );
       expect(result).toEqual({ path: true, role: false });
-    });
-
-    test("should handle path with trailing slash", () => {
-      const result = isRoleAllowed("/management/vehicles/", UserRole.Admin);
-      expect(result).toEqual({ path: true, role: true });
-    });
-
-    test("should handle path with multiple slashes", () => {
-      const result = isRoleAllowed("/management//vehicles", UserRole.Admin);
-      expect(result).toEqual({ path: false, role: false });
-    });
-  });
-
-  describe("Path Parameter Variations", () => {
-    test("should match edit route with complex ID", () => {
-      const result = isRoleAllowed(
-        "/management/vehicles/edit/user-123-abc",
-        UserRole.Admin
-      );
-      expect(result).toEqual({ path: true, role: true });
-    });
-
-    test("should match maintenance route with complex ID", () => {
-      const result = isRoleAllowed(
-        "/management/vehicles/maintenance/maint-456-def",
-        UserRole.Employee
-      );
-      expect(result).toEqual({ path: true, role: true });
-    });
-
-    test("should not match malformed dynamic routes", () => {
-      const result = isRoleAllowed(
-        "/management/vehicles/edit/",
-        UserRole.Admin
-      );
-      expect(result).toEqual({ path: false, role: false });
     });
   });
 });

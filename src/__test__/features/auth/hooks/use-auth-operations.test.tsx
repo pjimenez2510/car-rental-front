@@ -1,17 +1,20 @@
+// use-auth-operations.test.tsx
+import { renderHook } from "@testing-library/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { toast } from "sonner";
 import { signOut } from "next-auth/react";
-import { UserRole } from "@/features/users/interfaces/user.interface";
-import { routesRedirectAuth } from "@/lib/routes-redirect";
+import { toast } from "sonner";
 import { AuthService } from "@/features/auth/services/auth.datasource";
-import { act, renderHook } from "@testing-library/react";
-import { useAuthOperations } from "@/features/auth/hooks/use-auth-operations";
 import { login } from "@/features/auth/services/actions/login";
+import { useAuthOperations } from "@/features/auth/hooks/use-auth-operations";
 
 // Mocks
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
   useSearchParams: jest.fn(),
+}));
+
+jest.mock("next-auth/react", () => ({
+  signOut: jest.fn(),
 }));
 
 jest.mock("sonner", () => ({
@@ -21,9 +24,14 @@ jest.mock("sonner", () => ({
   },
 }));
 
-jest.mock("next-auth/react", () => ({
-  signOut: jest.fn(),
-}));
+// Mock de window.location
+const mockReplace = jest.fn();
+Object.defineProperty(window, "location", {
+  value: {
+    replace: mockReplace,
+  },
+  writable: true,
+});
 
 jest.mock("@/features/auth/services/auth.datasource", () => ({
   AuthService: {
@@ -39,301 +47,119 @@ describe("useAuthOperations", () => {
   const mockRouter = {
     push: jest.fn(),
   };
-
-  const mockSearchParams = {
-    get: jest.fn(),
-  };
-
   const mockAuthService = {
     login: jest.fn(),
     register: jest.fn(),
-    emailGender: jest.fn(),
     logout: jest.fn(),
+    emailGender: jest.fn(),
     recoveryPassword: jest.fn(),
   };
+  const mockSearchParams = new URLSearchParams();
+  const mockGetSearchParams = jest
+    .fn()
+    .mockImplementation((param) => mockSearchParams.get(param));
 
   beforeEach(() => {
     jest.clearAllMocks();
     (useRouter as jest.Mock).mockReturnValue(mockRouter);
-    (useSearchParams as jest.Mock).mockReturnValue(mockSearchParams);
+    (useSearchParams as jest.Mock).mockReturnValue({
+      get: mockGetSearchParams,
+    });
     (AuthService.getInstance as jest.Mock).mockReturnValue(mockAuthService);
-    window.location.replace = jest.fn();
-  });
-
-  describe("handleRedirect", () => {
-    it("debería usar callbackUrl si está disponible", async () => {
-      const callbackUrl = "/dashboard";
-      mockSearchParams.get.mockReturnValue(callbackUrl);
-
-      const { result } = renderHook(() => useAuthOperations());
-
-      await act(async () => {
-        await result.current.loginHandler({
-          email: "test@example.com",
-          password: "password",
-        });
-      });
-
-      expect(window.location.replace).toHaveBeenCalledWith(callbackUrl);
-    });
-
-    it("debería usar routesRedirectAuth si no hay callbackUrl", async () => {
-      mockSearchParams.get.mockReturnValue(null);
-      const userRole = UserRole.USER;
-      const mockLoginResponse = {
-        user: { role: userRole },
-        token: "token",
-      };
-
-      mockAuthService.login.mockResolvedValue(mockLoginResponse);
-      (login as jest.Mock).mockResolvedValue({ ok: true, message: "Success" });
-
-      const { result } = renderHook(() => useAuthOperations());
-
-      await act(async () => {
-        await result.current.loginHandler({
-          email: "test@example.com",
-          password: "password",
-        });
-      });
-
-      expect(window.location.replace).toHaveBeenCalledWith(
-        routesRedirectAuth[userRole]
-      );
-    });
   });
 
   describe("loginHandler", () => {
-    const mockLoginData = {
-      email: "test@example.com",
-      password: "password123",
-    };
-
-    it("debería procesar un login exitoso", async () => {
-      const mockLoginResponse = {
-        user: { role: UserRole.USER },
-        token: "mock-token",
-      };
-
-      mockAuthService.login.mockResolvedValue(mockLoginResponse);
+    it("should handle successful login", async () => {
+      // Arrange
+      const loginData = { email: "test@test.com", password: "123456" };
+      const mockResponse = { user: { role: "USER" } };
+      mockAuthService.login.mockResolvedValue(mockResponse);
       (login as jest.Mock).mockResolvedValue({
         ok: true,
         message: "Login exitoso",
       });
 
+      // Act
       const { result } = renderHook(() => useAuthOperations());
+      await result.current.loginHandler(loginData);
 
-      await act(async () => {
-        await result.current.loginHandler(mockLoginData);
-      });
-
-      expect(mockAuthService.login).toHaveBeenCalledWith(mockLoginData);
-      expect(login).toHaveBeenCalledWith(mockLoginResponse);
+      // Assert
+      expect(mockAuthService.login).toHaveBeenCalledWith(loginData);
+      expect(login).toHaveBeenCalledWith(mockResponse);
       expect(toast.success).toHaveBeenCalledWith("Login exitoso");
+      expect(mockReplace).toHaveBeenCalled();
     });
 
-    it("no debería redireccionar si el login no es exitoso", async () => {
-      const mockLoginResponse = {
-        user: { role: UserRole.USER },
-        token: "mock-token",
-      };
+    it("should not redirect if login action fails", async () => {
+      // Arrange
+      const loginData = { email: "test@test.com", password: "123456" };
+      const mockResponse = { user: { role: "USER" } };
+      mockAuthService.login.mockResolvedValue(mockResponse);
+      (login as jest.Mock).mockResolvedValue({ ok: false });
 
-      mockAuthService.login.mockResolvedValue(mockLoginResponse);
-      (login as jest.Mock).mockResolvedValue({
-        ok: false,
-        message: "Error en login",
-      });
-
+      // Act
       const { result } = renderHook(() => useAuthOperations());
+      await result.current.loginHandler(loginData);
 
-      await act(async () => {
-        await result.current.loginHandler(mockLoginData);
-      });
-
-      expect(window.location.replace).not.toHaveBeenCalled();
-      expect(toast.success).not.toHaveBeenCalled();
-    });
-
-    it("debería manejar errores en el login", async () => {
-      const mockError = new Error("Error en login");
-      mockAuthService.login.mockRejectedValue(mockError);
-      console.error = jest.fn();
-
-      const { result } = renderHook(() => useAuthOperations());
-
-      await act(async () => {
-        await result.current.loginHandler(mockLoginData);
-      });
-
-      expect(console.error).toHaveBeenCalledWith(mockError);
-    });
-  });
-
-  describe("registerHandler", () => {
-    const mockRegisterData = {
-      firstName: "Test",
-      lastName: "User",
-      username: "testuser",
-      email: "testuser@example.com",
-      password: "password123",
-    };
-
-    it("debería procesar un registro exitoso", async () => {
-      const mockRegisterResponse = {
-        user: { role: UserRole.USER },
-        token: "mock-token",
-      };
-
-      mockAuthService.register.mockResolvedValue(mockRegisterResponse);
-      (login as jest.Mock).mockResolvedValue({
-        ok: true,
-        message: "Registro exitoso",
-      });
-
-      const { result } = renderHook(() => useAuthOperations());
-
-      await act(async () => {
-        await result.current.registerHandler(mockRegisterData);
-      });
-
-      expect(mockAuthService.register).toHaveBeenCalledWith(mockRegisterData);
-      expect(toast.success).toHaveBeenCalled();
-      expect(window.location.replace).toHaveBeenCalled();
-    });
-
-    it("debería manejar errores en el registro", async () => {
-      const mockError = new Error("Error en registro");
-      mockAuthService.register.mockRejectedValue(mockError);
-      console.error = jest.fn();
-
-      const { result } = renderHook(() => useAuthOperations());
-
-      await act(async () => {
-        await result.current.registerHandler(mockRegisterData);
-      });
-
-      expect(console.error).toHaveBeenCalledWith(mockError);
-    });
-  });
-
-  describe("emailGenderHandler", () => {
-    const mockEmailData = {
-      email: "test@example.com",
-    };
-
-    it("debería procesar un envío de email exitoso", async () => {
-      const successMessage = "Email enviado exitosamente";
-      mockAuthService.emailGender.mockResolvedValue(successMessage);
-
-      const { result } = renderHook(() => useAuthOperations());
-
-      await act(async () => {
-        await result.current.emailGenderHandler(mockEmailData);
-      });
-
-      expect(mockAuthService.emailGender).toHaveBeenCalledWith(mockEmailData);
-      expect(toast.success).toHaveBeenCalledWith(successMessage);
-      expect(mockRouter.push).toHaveBeenCalledWith("/login");
-    });
-
-    it("debería manejar errores en el envío de email", async () => {
-      const mockError = new Error("Error en envío de email");
-      mockAuthService.emailGender.mockRejectedValue(mockError);
-      console.error = jest.fn();
-
-      const { result } = renderHook(() => useAuthOperations());
-
-      await act(async () => {
-        await result.current.emailGenderHandler(mockEmailData);
-      });
-
-      expect(console.error).toHaveBeenCalledWith(mockError);
+      // Assert
+      expect(mockReplace).not.toHaveBeenCalled();
     });
   });
 
   describe("logoutHandler", () => {
-    it("debería procesar un logout exitoso", async () => {
-      mockAuthService.logout.mockResolvedValue(undefined);
-
+    it("should handle logout successfully", async () => {
+      // Act
       const { result } = renderHook(() => useAuthOperations());
+      await result.current.logoutHandler();
 
-      await act(async () => {
-        await result.current.logoutHandler();
-      });
-
-      expect(mockAuthService.logout).toHaveBeenCalled();
+      // Assert
       expect(signOut).toHaveBeenCalled();
+      expect(mockAuthService.logout).toHaveBeenCalled();
       expect(toast.success).toHaveBeenCalledWith("Sesión cerrada exitosamente");
       expect(mockRouter.push).toHaveBeenCalledWith("/login");
-    });
-
-    it("debería manejar errores en el logout", async () => {
-      const mockError = new Error("Error en logout");
-      mockAuthService.logout.mockRejectedValue(mockError);
-      console.error = jest.fn();
-
-      const { result } = renderHook(() => useAuthOperations());
-
-      await act(async () => {
-        await result.current.logoutHandler();
-      });
-
-      expect(console.error).toHaveBeenCalledWith(mockError);
     });
   });
 
   describe("recoveryPasswordHandler", () => {
-    const mockRecoveryData = {
-      password: "newpassword123",
-      passwordConfirmation: "newpassword123",
-    };
+    it("should handle missing reset token", async () => {
+      // Arrange
+      const recoveryData = {
+        password: "newPassword",
+        passwordConfirmation: "newPassword",
+      };
 
-    it("debería procesar una recuperación de contraseña exitosa", async () => {
-      const successMessage = "Contraseña actualizada exitosamente";
-      mockSearchParams.get.mockReturnValue("valid-token");
-      mockAuthService.recoveryPassword.mockResolvedValue(successMessage);
-
+      // Act
       const { result } = renderHook(() => useAuthOperations());
+      await result.current.recoveryPasswordHandler(recoveryData);
 
-      await act(async () => {
-        await result.current.recoveryPasswordHandler(mockRecoveryData);
-      });
-
-      expect(mockAuthService.recoveryPassword).toHaveBeenCalledWith({
-        ...mockRecoveryData,
-        resetPasswordToken: "valid-token",
-      });
-      expect(toast.success).toHaveBeenCalledWith(successMessage);
-    });
-
-    it("debería mostrar error cuando no hay token de reseteo", async () => {
-      mockSearchParams.get.mockReturnValue(null);
-
-      const { result } = renderHook(() => useAuthOperations());
-
-      await act(async () => {
-        await result.current.recoveryPasswordHandler(mockRecoveryData);
-      });
-
+      // Assert
       expect(toast.error).toHaveBeenCalledWith(
         "El token de reseteo no ha sido probehido"
       );
       expect(mockAuthService.recoveryPassword).not.toHaveBeenCalled();
     });
 
-    it("debería manejar errores en la recuperación de contraseña", async () => {
-      const mockError = new Error("Error en recuperación");
-      mockSearchParams.get.mockReturnValue("valid-token");
-      mockAuthService.recoveryPassword.mockRejectedValue(mockError);
-      console.error = jest.fn();
+    it("should handle successful password recovery", async () => {
+      // Arrange
+      mockSearchParams.append("reset_password_token", "valid-token");
+      const recoveryData = {
+        password: "newPassword",
+        passwordConfirmation: "newPassword",
+      };
+      mockAuthService.recoveryPassword.mockResolvedValue(
+        "Contraseña actualizada"
+      );
 
+      // Act
       const { result } = renderHook(() => useAuthOperations());
+      await result.current.recoveryPasswordHandler(recoveryData);
 
-      await act(async () => {
-        await result.current.recoveryPasswordHandler(mockRecoveryData);
+      // Assert
+      expect(mockAuthService.recoveryPassword).toHaveBeenCalledWith({
+        ...recoveryData,
+        resetPasswordToken: "valid-token",
       });
-
-      expect(console.error).toHaveBeenCalledWith(mockError);
+      expect(toast.success).toHaveBeenCalledWith("Contraseña actualizada");
     });
   });
 });

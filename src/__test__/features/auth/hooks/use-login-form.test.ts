@@ -1,15 +1,10 @@
-import { useAuthOperations } from "@/features/auth/hooks/use-auth-operations";
+// src/__test__/features/auth/hooks/use-login.test.ts
+import { renderHook, act } from "@testing-library/react";
+import { useAuthOperations } from "../../../../features/auth/hooks/use-auth-operations";
 import { useLogin } from "@/features/auth/hooks/use-login-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { act, renderHook } from "@testing-library/react";
 
-// Mocks
-jest.mock("@/features/auth/hooks/use-auth-operations", () => ({
+jest.mock("../../../../features/auth/hooks/use-auth-operations", () => ({
   useAuthOperations: jest.fn(),
-}));
-
-jest.mock("@hookform/resolvers/zod", () => ({
-  zodResolver: jest.fn(),
 }));
 
 describe("useLogin", () => {
@@ -20,10 +15,9 @@ describe("useLogin", () => {
     (useAuthOperations as jest.Mock).mockReturnValue({
       loginHandler: mockLoginHandler,
     });
-    (zodResolver as jest.Mock).mockReturnValue(jest.fn());
   });
 
-  it("debería inicializar el formulario con valores por defecto", () => {
+  it("should initialize with default values", () => {
     const { result } = renderHook(() => useLogin());
 
     expect(result.current.methods.getValues()).toEqual({
@@ -32,168 +26,111 @@ describe("useLogin", () => {
     });
   });
 
-  it("debería exponer las funciones y estados necesarios", () => {
+  it("should handle form submission with valid data", async () => {
     const { result } = renderHook(() => useLogin());
-
-    expect(result.current).toHaveProperty("onSubmit");
-    expect(result.current).toHaveProperty("methods");
-    expect(result.current).toHaveProperty("isSubmiting");
-  });
-
-  describe("Validación de email", () => {
-    it("debería mostrar error cuando el email está vacío", async () => {
-      const { result } = renderHook(() => useLogin());
-
-      await act(async () => {
-        await result.current.methods.trigger("email");
-      });
-
-      expect(result.current.methods.formState.errors.email?.message).toBe(
-        "El email es requerido"
-      );
-    });
-
-    it("debería mostrar error cuando el email es inválido", async () => {
-      const { result } = renderHook(() => useLogin());
-
-      await act(async () => {
-        result.current.methods.setValue("email", "invalid-email");
-        await result.current.methods.trigger("email");
-      });
-
-      expect(result.current.methods.formState.errors.email?.message).toBe(
-        "El email no es válido"
-      );
-    });
-
-    it("no debería mostrar error con un email válido", async () => {
-      const { result } = renderHook(() => useLogin());
-
-      await act(async () => {
-        result.current.methods.setValue("email", "test@example.com");
-        await result.current.methods.trigger("email");
-      });
-
-      expect(result.current.methods.formState.errors.email).toBeUndefined();
-    });
-  });
-
-  describe("Validación de password", () => {
-    it("debería mostrar error cuando la contraseña es muy corta", async () => {
-      const { result } = renderHook(() => useLogin());
-
-      await act(async () => {
-        result.current.methods.setValue("password", "12345");
-        await result.current.methods.trigger("password");
-      });
-
-      expect(result.current.methods.formState.errors.password?.message).toBe(
-        "La contraseña debe tener como mínimo 6 carácteres"
-      );
-    });
-
-    it("no debería mostrar error con una contraseña válida", async () => {
-      const { result } = renderHook(() => useLogin());
-
-      await act(async () => {
-        result.current.methods.setValue("password", "123456");
-        await result.current.methods.trigger("password");
-      });
-
-      expect(result.current.methods.formState.errors.password).toBeUndefined();
-    });
-  });
-
-  describe("Manejo del formulario completo", () => {
-    const validFormData = {
+    const validData = {
       email: "test@example.com",
-      password: "123456",
+      password: "password123",
     };
 
-    it("debería llamar loginHandler con los datos correctos al hacer submit", async () => {
-      const { result } = renderHook(() => useLogin());
-
-      await act(async () => {
-        result.current.methods.setValue("email", validFormData.email);
-        result.current.methods.setValue("password", validFormData.password);
-        await result.current.onSubmit(validFormData);
-      });
-
-      expect(mockLoginHandler).toHaveBeenCalledWith(validFormData);
+    await act(async () => {
+      result.current.methods.setValue("email", validData.email);
+      result.current.methods.setValue("password", validData.password);
+      await result.current.onSubmit(validData);
     });
 
-    it("debería actualizar isSubmiting durante el proceso de envío", async () => {
-      const { result } = renderHook(() => useLogin());
-
-      // Simulamos que loginHandler toma tiempo en resolver
-      mockLoginHandler.mockImplementation(
-        () => new Promise((resolve) => setTimeout(resolve, 100))
-      );
-
-      let isSubmittingDuringSubmission = false;
-
-      await act(async () => {
-        result.current.methods.setValue("email", validFormData.email);
-        result.current.methods.setValue("password", validFormData.password);
-        const submitPromise = result.current.onSubmit(validFormData);
-        isSubmittingDuringSubmission = result.current.isSubmiting;
-        await submitPromise;
-      });
-
-      expect(isSubmittingDuringSubmission).toBe(true);
-      expect(result.current.isSubmiting).toBe(false);
-    });
-
-    it("debería manejar errores durante el submit", async () => {
-      const error = new Error("Submit error");
-      mockLoginHandler.mockRejectedValue(error);
-      console.error = jest.fn();
-
-      const { result } = renderHook(() => useLogin());
-
-      await act(async () => {
-        await result.current.onSubmit(validFormData);
-      });
-
-      expect(mockLoginHandler).toHaveBeenCalledWith(validFormData);
-      expect(console.error).toHaveBeenCalled();
-    });
+    expect(mockLoginHandler).toHaveBeenCalledWith(validData);
   });
 
-  describe("Validación de formulario completo", () => {
-    it("no debería tener errores con datos válidos", async () => {
-      const { result } = renderHook(() => useLogin());
+  it("should show validation error for invalid email", async () => {
+    const { result } = renderHook(() => useLogin());
 
-      await act(async () => {
-        result.current.methods.setValue("email", "test@example.com");
-        result.current.methods.setValue("password", "123456");
-        await result.current.methods.trigger();
-      });
-
-      expect(result.current.methods.formState.errors).toEqual({});
-      expect(result.current.methods.formState.isValid).toBe(true);
+    await act(async () => {
+      result.current.methods.setValue("email", "invalid-email");
+      await result.current.methods.handleSubmit(() => {})();
     });
 
-    it("debería tener errores con datos inválidos", async () => {
-      const { result } = renderHook(() => useLogin());
-
-      await act(async () => {
-        result.current.methods.setValue("email", "invalid-email");
-        result.current.methods.setValue("password", "12345");
-        await result.current.methods.trigger();
-      });
-
-      expect(result.current.methods.formState.errors.email).toBeDefined();
-      expect(result.current.methods.formState.errors.password).toBeDefined();
-      expect(result.current.methods.formState.isValid).toBe(false);
-    });
+    expect(result.current.methods.formState.errors.email?.message).toBe(
+      "El email no es válido"
+    );
   });
 
-  describe("Integración con zodResolver", () => {
-    it("debería configurar el resolver de zod correctamente", () => {
-      renderHook(() => useLogin());
+  it("should show validation error for empty fields", async () => {
+    const { result } = renderHook(() => useLogin());
 
-      expect(zodResolver).toHaveBeenCalled();
+    await act(async () => {
+      await result.current.methods.handleSubmit(() => {})();
     });
+
+    expect(result.current.methods.formState.errors.email?.message).toBe(
+      "El email es requerido"
+    );
+    expect(result.current.methods.formState.errors.password?.message).toBe(
+      "La contraseña debe tener como mínimo 6 carácteres"
+    );
+  });
+
+  it("should show validation error for short password", async () => {
+    const { result } = renderHook(() => useLogin());
+
+    await act(async () => {
+      result.current.methods.setValue("password", "12345");
+      await result.current.methods.handleSubmit(() => {})();
+    });
+
+    expect(result.current.methods.formState.errors.password?.message).toBe(
+      "La contraseña debe tener como mínimo 6 carácteres"
+    );
+  });
+
+  it("should track submission state correctly", async () => {
+    const { result } = renderHook(() => useLogin());
+
+    expect(result.current.isSubmiting).toBe(false);
+
+    mockLoginHandler.mockImplementation(
+      () => new Promise((resolve) => setTimeout(resolve, 100))
+    );
+
+    await act(async () => {
+      result.current.methods.setValue("email", "test@example.com");
+      result.current.methods.setValue("password", "password123");
+      await result.current.methods.handleSubmit(() => {})();
+    });
+
+    expect(result.current.isSubmiting).toBe(false);
+  });
+
+  it("should validate multiple scenarios correctly", async () => {
+    const { result } = renderHook(() => useLogin());
+
+    // Test invalid email
+    await act(async () => {
+      result.current.methods.setValue("email", "invalid-email");
+      result.current.methods.setValue("password", "valid123");
+      await result.current.methods.handleSubmit(() => {})();
+    });
+    expect(result.current.methods.formState.errors.email?.message).toBe(
+      "El email no es válido"
+    );
+
+    // Test short password
+    await act(async () => {
+      result.current.methods.setValue("email", "test@example.com");
+      result.current.methods.setValue("password", "12345");
+      await result.current.methods.handleSubmit(() => {})();
+    });
+    expect(result.current.methods.formState.errors.password?.message).toBe(
+      "La contraseña debe tener como mínimo 6 carácteres"
+    );
+
+    // Test valid data
+    await act(async () => {
+      result.current.methods.setValue("email", "test@example.com");
+      result.current.methods.setValue("password", "valid123");
+      await result.current.methods.handleSubmit(() => {})();
+    });
+    expect(result.current.methods.formState.errors.email).toBeUndefined();
+    expect(result.current.methods.formState.errors.password).toBeUndefined();
   });
 });

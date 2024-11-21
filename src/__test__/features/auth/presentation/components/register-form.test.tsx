@@ -1,10 +1,10 @@
-import { useAuthOperations } from "@/features/auth/hooks/use-auth-operations";
-import RegisterForm from "@/features/auth/presentation/components/register-form";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import RegisterForm from "@/features/auth/presentation/components/register-form";
+import { useAuthOperations } from "@/features/auth/hooks/use-auth-operations";
 
 jest.mock("@/features/auth/hooks/use-auth-operations", () => ({
-  useAuthFacade: jest.fn(),
+  useAuthOperations: jest.fn(),
 }));
 
 describe("RegisterForm", () => {
@@ -20,40 +20,49 @@ describe("RegisterForm", () => {
   it("renders form elements correctly", () => {
     render(<RegisterForm />);
 
-    expect(screen.getByLabelText("Nombre")).toBeInTheDocument();
-    expect(screen.getByLabelText("Apellido")).toBeInTheDocument();
-    expect(screen.getByLabelText("Nombre de usuario")).toBeInTheDocument();
-    expect(screen.getByLabelText("Email")).toBeInTheDocument();
-    expect(screen.getByLabelText("Contraseña")).toBeInTheDocument();
+    // Usamos una búsqueda más específica para el campo de nombre
     expect(
-      screen.getByRole("button", { name: "Registrarse" })
+      screen.getByRole("textbox", { name: /^nombre$/i })
     ).toBeInTheDocument();
-    expect(screen.getByText("Ya tenés una cuenta?")).toBeInTheDocument();
+    expect(
+      screen.getByRole("textbox", { name: /apellido/i })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("textbox", { name: /nombre de usuario/i })
+    ).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: /email/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/contraseña/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /registrarse/i })
+    ).toBeInTheDocument();
+    expect(screen.getByText(/ya tenés una cuenta/i)).toBeInTheDocument();
+    expect(screen.getByText(/inicia sesión/i)).toBeInTheDocument();
   });
 
   it("handles form submission with valid data", async () => {
     render(<RegisterForm />);
 
-    const firstNameInput = screen.getByLabelText("Nombre");
-    const lastNameInput = screen.getByLabelText("Apellido");
-    const usernameInput = screen.getByLabelText("Nombre de usuario");
-    const emailInput = screen.getByLabelText("Email");
-    const passwordInput = screen.getByLabelText("Contraseña");
-    const submitButton = screen.getByRole("button", { name: "Registrarse" });
+    const firstNameInput = screen.getByRole("textbox", { name: /^nombre$/i });
+    const lastNameInput = screen.getByRole("textbox", { name: /apellido/i });
+    const usernameInput = screen.getByRole("textbox", {
+      name: /nombre de usuario/i,
+    });
+    const emailInput = screen.getByRole("textbox", { name: /email/i });
+    const passwordInput = screen.getByLabelText(/contraseña/i);
+    const submitButton = screen.getByRole("button", { name: /registrarse/i });
 
-    await userEvent.type(firstNameInput, "Test");
-    await userEvent.type(lastNameInput, "User");
-    await userEvent.type(usernameInput, "testuser");
+    await userEvent.type(firstNameInput, "John");
+    await userEvent.type(lastNameInput, "Doe");
+    await userEvent.type(usernameInput, "johndoe");
     await userEvent.type(emailInput, "test@example.com");
     await userEvent.type(passwordInput, "password123");
-
     await userEvent.click(submitButton);
 
     await waitFor(() => {
       expect(mockRegisterHandler).toHaveBeenCalledWith({
-        firstName: "Test",
-        lastName: "User",
-        username: "testuser",
+        firstName: "John",
+        lastName: "Doe",
+        username: "johndoe",
         email: "test@example.com",
         password: "password123",
       });
@@ -62,8 +71,7 @@ describe("RegisterForm", () => {
 
   it("shows validation errors for empty fields", async () => {
     render(<RegisterForm />);
-
-    const submitButton = screen.getByRole("button", { name: "Registrarse" });
+    const submitButton = screen.getByRole("button", { name: /registrarse/i });
     await userEvent.click(submitButton);
 
     expect(
@@ -87,11 +95,9 @@ describe("RegisterForm", () => {
 
   it("shows validation error for invalid email", async () => {
     render(<RegisterForm />);
-
-    const emailInput = screen.getByLabelText("Email");
+    const emailInput = screen.getByRole("textbox", { name: /email/i });
     await userEvent.type(emailInput, "invalid-email");
-
-    const submitButton = screen.getByRole("button", { name: "Registrarse" });
+    const submitButton = screen.getByRole("button", { name: /registrarse/i });
     await userEvent.click(submitButton);
 
     expect(
@@ -101,11 +107,9 @@ describe("RegisterForm", () => {
 
   it("shows validation error for short password", async () => {
     render(<RegisterForm />);
-
-    const passwordInput = screen.getByLabelText("Contraseña");
+    const passwordInput = screen.getByLabelText(/contraseña/i);
     await userEvent.type(passwordInput, "12345");
-
-    const submitButton = screen.getByRole("button", { name: "Registrarse" });
+    const submitButton = screen.getByRole("button", { name: /registrarse/i });
     await userEvent.click(submitButton);
 
     expect(
@@ -121,21 +125,20 @@ describe("RegisterForm", () => {
     );
 
     render(<RegisterForm />);
+    const firstNameInput = screen.getByRole("textbox", { name: /^nombre$/i });
+    const lastNameInput = screen.getByRole("textbox", { name: /apellido/i });
+    const usernameInput = screen.getByRole("textbox", {
+      name: /nombre de usuario/i,
+    });
+    const emailInput = screen.getByRole("textbox", { name: /email/i });
+    const passwordInput = screen.getByLabelText(/contraseña/i);
+    const submitButton = screen.getByRole("button", { name: /registrarse/i });
 
-    const emailInput = screen.getByLabelText("Email");
-    const passwordInput = screen.getByLabelText("Contraseña");
-    const firstNameInput = screen.getByLabelText("Nombre");
-    const lastNameInput = screen.getByLabelText("Apellido");
-    const usernameInput = screen.getByLabelText("Nombre de usuario");
-
-    const submitButton = screen.getByRole("button", { name: "Registrarse" });
-
-    await userEvent.type(firstNameInput, "Test");
-    await userEvent.type(lastNameInput, "User");
-    await userEvent.type(usernameInput, "testuser");
+    await userEvent.type(firstNameInput, "John");
+    await userEvent.type(lastNameInput, "Doe");
+    await userEvent.type(usernameInput, "johndoe");
     await userEvent.type(emailInput, "test@example.com");
     await userEvent.type(passwordInput, "password123");
-
     await userEvent.click(submitButton);
 
     expect(submitButton).toBeDisabled();

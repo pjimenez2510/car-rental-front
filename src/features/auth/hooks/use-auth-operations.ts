@@ -66,9 +66,8 @@ export function useAuthOperations() {
 
   const logoutHandler = async () => {
     try {
-      console.log("logoutHandler");
-      await authDatasource.logout();
       await signOut();
+      await authDatasource.logout();
       toast.success("Sesión cerrada exitosamente");
       router.push("/login");
     } catch (error) {

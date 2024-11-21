@@ -3,7 +3,7 @@ import LoginForm from "@/features/auth/presentation/components/login-form";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-jest.mock("@/features/auth/hooks/use-auth-facade", () => ({
+jest.mock("@/features/auth/hooks/use-auth-operations", () => ({
   useAuthFacade: jest.fn(),
 }));
 
@@ -19,7 +19,6 @@ describe("LoginForm", () => {
 
   it("renders form elements correctly", () => {
     render(<LoginForm />);
-
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/contraseña/i)).toBeInTheDocument();
     expect(

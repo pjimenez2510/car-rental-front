@@ -10,7 +10,7 @@ import { TokenDecode } from "../interfaces/toke-decode.interface";
 import { EmailGender } from "../interfaces/email-gender.interface";
 import { Recovery } from "../interfaces/recovery.interface";
 
-interface AuthDatasource {
+interface IAuthService {
   login(user: Login): Promise<Auth>;
   register(user: Register): Promise<Auth>;
   logout(): Promise<void>;
@@ -19,10 +19,10 @@ interface AuthDatasource {
   recoveryPassword(user: Recovery): Promise<string>;
 }
 
-export class AuthDatasourceImpl implements AuthDatasource {
+export class AuthService implements IAuthService {
   private url: string = "api/v1/auth";
   private axiosCLient: AxiosClient;
-  private static instance: AuthDatasourceImpl;
+  private static instance: AuthService;
 
   private constructor() {
     this.axiosCLient = AxiosClient.getInstance();
@@ -42,11 +42,11 @@ export class AuthDatasourceImpl implements AuthDatasource {
     return data.message;
   }
 
-  public static getInstance(): AuthDatasource {
-    if (!AuthDatasourceImpl.instance) {
-      AuthDatasourceImpl.instance = new AuthDatasourceImpl();
+  public static getInstance(): IAuthService {
+    if (!AuthService.instance) {
+      AuthService.instance = new AuthService();
     }
-    return AuthDatasourceImpl.instance;
+    return AuthService.instance;
   }
 
   async login(user: Login): Promise<Auth> {

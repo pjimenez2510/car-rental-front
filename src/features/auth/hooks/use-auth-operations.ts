@@ -1,5 +1,7 @@
+"use client";
+
 import { useRouter, useSearchParams } from "next/navigation";
-import { AuthDatasourceImpl } from "../services/auth.datasource";
+import { AuthService } from "../services/auth.datasource";
 import { Login, Register } from "../interfaces/auth.interface";
 import { toast } from "sonner";
 import { routesRedirectAuth } from "@/lib/routes-redirect";
@@ -10,7 +12,7 @@ import { Recovery } from "../interfaces/recovery.interface";
 import { signOut } from "next-auth/react";
 
 export function useAuthOperations() {
-  const authDatasource = AuthDatasourceImpl.getInstance();
+  const authDatasource = AuthService.getInstance();
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get("callbackUrl");
   const router = useRouter();
@@ -64,6 +66,7 @@ export function useAuthOperations() {
 
   const logoutHandler = async () => {
     try {
+      console.log("logoutHandler");
       await authDatasource.logout();
       await signOut();
       toast.success("Sesión cerrada exitosamente");
@@ -82,7 +85,7 @@ export function useAuthOperations() {
         toast.error("El token de reseteo no ha sido probehido");
         return;
       }
-      const res = await AuthDatasourceImpl.getInstance().recoveryPassword({
+      const res = await AuthService.getInstance().recoveryPassword({
         ...data,
         resetPasswordToken: token,
       });

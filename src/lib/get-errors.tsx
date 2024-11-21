@@ -1,10 +1,27 @@
-export const getErrors = (errors: string | string[] | undefined) => {
-  if (!errors) return;
-  const errorsArray = Array.isArray(errors) ? errors : [errors];
+type ErrorObject = {
+  [key: string]: string;
+};
+
+type ErrorInput = string | string[] | ErrorObject | ErrorObject[] | undefined;
+
+export const getErrors = (errors: ErrorInput) => {
+  if (!errors) return null;
+
+  const getErrorMessage = (error: string | ErrorObject): string => {
+    if (typeof error === "string") return error;
+    return Object.values(error)[0];
+  };
+
+  const errorsArray = Array.isArray(errors)
+    ? errors.map(getErrorMessage)
+    : [getErrorMessage(errors)];
+
   return (
-    <div>
+    <div className="error-container">
       {errorsArray.map((error, index) => (
-        <p key={index}>{error}</p>
+        <p key={index} className="text-red-500">
+          {error}
+        </p>
       ))}
     </div>
   );

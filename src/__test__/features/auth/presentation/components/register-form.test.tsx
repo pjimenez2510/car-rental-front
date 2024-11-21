@@ -3,7 +3,7 @@ import RegisterForm from "@/features/auth/presentation/components/register-form"
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-jest.mock("@/features/auth/hooks/use-auth-facade", () => ({
+jest.mock("@/features/auth/hooks/use-auth-operations", () => ({
   useAuthFacade: jest.fn(),
 }));
 

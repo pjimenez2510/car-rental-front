@@ -1,0 +1,63 @@
+{
+    "listVhicles": {
+        "success": true,
+        "message": "",
+        "data": {
+            "vehicles": [
+                {
+                    "id": 121,
+                    "brand": "Honda",
+                    "model": "A5",
+                    "license_plate": "LHS-6262",
+                    "year": 2023,
+                    "status": "available",
+                    "url": null,
+                    "last_checkup_date": "2024-07-22",
+                    "daily_rate": "148.0",
+                    "weekly_rate": "460.0",
+                    "monthly_rate": "1771.0",
+                    "vehicle_type": {
+                        "id": 41,
+                        "name": "Sedan"
+                    }
+                },
+                {
+                    "id": 124,
+                    "brand": "Ford",
+                    "model": "Camero",
+                    "license_plate": "GET-7379",
+                    "year": 2019,
+                    "status": "available",
+                    "url": null,
+                    "last_checkup_date": "2024-06-01",
+                    "daily_rate": "180.0",
+                    "weekly_rate": "500.0",
+                    "monthly_rate": "1900.0",
+                    "vehicle_type": {
+                        "id": 42,
+                        "name": "SUV"
+                    }
+                }
+            ]
+        },
+        "errors": []
+    },
+    "createVehicleResponse": {
+        "success": true,
+        "message": "Vehicle created successfully.",
+        "data": {
+            "vehicle": {
+                "id": 136,
+                "brand": "Toyota",
+                "model": "Camry",
+                "license_plate": "ABC-1234",
+                "year": 2023,
+                "status": "available",
+                "last_checkup_date": null,
+                "vehicle_type_id": 41,
+                "url": "https://acroadtrip.blob.core.windows.net/catalogo-imagenes/s/RT_V_253bb2bf37834fcc94aab18693c17252.webp"
+            }
+        },
+        "errors": []
+    }
+}

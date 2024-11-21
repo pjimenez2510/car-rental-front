@@ -53,7 +53,7 @@ const RHFImageInput: React.FC<FormImageInputProps> = ({
           <div className="space-y-2">
             <div className="relative rounded-lg overflow-hidden border border-gray-200">
               <img
-                src={field.value}
+                src={field.value || ""}
                 alt="Preview"
                 className="w-full h-60 object-cover"
                 onError={handleImageError}

@@ -1,10 +1,10 @@
-import { useAuthOperations } from "@/features/auth/hooks/use-auth-operations";
-import LoginForm from "@/features/auth/presentation/components/login-form";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import LoginForm from "@/features/auth/presentation/components/login-form";
+import { useAuthOperations } from "@/features/auth/hooks/use-auth-operations";
 
 jest.mock("@/features/auth/hooks/use-auth-operations", () => ({
-  useAuthFacade: jest.fn(),
+  useAuthOperations: jest.fn(),
 }));
 
 describe("LoginForm", () => {
@@ -19,25 +19,37 @@ describe("LoginForm", () => {
 
   it("renders form elements correctly", () => {
     render(<LoginForm />);
-    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+
+    // Verificar campos del formulario
+    expect(screen.getByRole("textbox", { name: /email/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/contraseña/i)).toBeInTheDocument();
+
+    // Verificar botón de submit
     expect(
       screen.getByRole("button", { name: /ingresar/i })
     ).toBeInTheDocument();
-    expect(screen.getByText(/¿olvidaste tu contraseña\?/i)).toBeInTheDocument();
+
+    // Verificar enlaces
+    expect(screen.getByText(/¿olvidaste tu contraseña\?/i)).toHaveAttribute(
+      "href",
+      "/forgot-password"
+    );
+    expect(screen.getByText(/registrate/i)).toHaveAttribute(
+      "href",
+      "/register"
+    );
     expect(screen.getByText(/no tienes una cuenta\?/i)).toBeInTheDocument();
   });
 
   it("handles form submission with valid data", async () => {
     render(<LoginForm />);
 
-    const emailInput = screen.getByLabelText(/email/i);
+    const emailInput = screen.getByRole("textbox", { name: /email/i });
     const passwordInput = screen.getByLabelText(/contraseña/i);
     const submitButton = screen.getByRole("button", { name: /ingresar/i });
 
     await userEvent.type(emailInput, "test@example.com");
     await userEvent.type(passwordInput, "password123");
-
     await userEvent.click(submitButton);
 
     await waitFor(() => {
@@ -50,8 +62,8 @@ describe("LoginForm", () => {
 
   it("shows validation errors for empty fields", async () => {
     render(<LoginForm />);
-
     const submitButton = screen.getByRole("button", { name: /ingresar/i });
+
     await userEvent.click(submitButton);
 
     expect(
@@ -67,7 +79,7 @@ describe("LoginForm", () => {
   it("shows validation error for invalid email", async () => {
     render(<LoginForm />);
 
-    const emailInput = screen.getByLabelText(/email/i);
+    const emailInput = screen.getByRole("textbox", { name: /email/i });
     await userEvent.type(emailInput, "invalid-email");
 
     const submitButton = screen.getByRole("button", { name: /ingresar/i });
@@ -101,13 +113,12 @@ describe("LoginForm", () => {
 
     render(<LoginForm />);
 
-    const emailInput = screen.getByLabelText(/email/i);
+    const emailInput = screen.getByRole("textbox", { name: /email/i });
     const passwordInput = screen.getByLabelText(/contraseña/i);
     const submitButton = screen.getByRole("button", { name: /ingresar/i });
 
     await userEvent.type(emailInput, "test@example.com");
     await userEvent.type(passwordInput, "password123");
-
     await userEvent.click(submitButton);
 
     expect(submitButton).toBeDisabled();
@@ -119,5 +130,19 @@ describe("LoginForm", () => {
         document.getElementById("loading-spinner")
       ).not.toBeInTheDocument();
     });
+  });
+
+  it("navigates to registration page when clicking register link", async () => {
+    render(<LoginForm />);
+
+    const registerLink = screen.getByText(/registrate/i);
+    expect(registerLink).toHaveAttribute("href", "/register");
+  });
+
+  it("navigates to forgot password page when clicking forgot password link", async () => {
+    render(<LoginForm />);
+
+    const forgotPasswordLink = screen.getByText(/¿olvidaste tu contraseña\?/i);
+    expect(forgotPasswordLink).toHaveAttribute("href", "/forgot-password");
   });
 });

@@ -14,7 +14,6 @@ export enum UserRole {
   Admin = "admin",
   Customer = "customer",
   Employee = "employee",
-  USER = "USER",
 }
 
 export type UserCreate = UserBase;

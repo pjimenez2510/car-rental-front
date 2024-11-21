@@ -15,7 +15,7 @@ export interface Vehicle extends VehicleBase {
   lastCheckupDate?: Date;
   dailyRate?: number;
   weeklyRate?: number;
-  monthlyRate: number;
+  monthlyRate?: number;
 }
 
 export interface VehicleCreate extends VehicleBase {

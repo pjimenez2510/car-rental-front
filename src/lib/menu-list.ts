@@ -22,7 +22,7 @@ type Group = {
   menus: Menu[];
 };
 
-const getAllMenuList = (pathname: string) => {
+export const getAllMenuList = (pathname: string) => {
   const allMenus: Group[] = [
     {
       groupLabel: "Módulos",

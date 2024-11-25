@@ -59,5 +59,23 @@
             }
         },
         "errors": []
+    },
+    "editVehicleResponse": {
+        "success": true,
+        "message": "",
+        "data": {
+            "vehicle": {
+                "brand": "Chevrolet",
+                "model": "Camry",
+                "license_plate": "ABC-1235",
+                "year": 2023,
+                "vehicle_type_id": 41,
+                "id": 123,
+                "status": "rented",
+                "last_checkup_date": "2024-10-07",
+                "url": null
+            }
+        },
+        "errors": []
     }
 }

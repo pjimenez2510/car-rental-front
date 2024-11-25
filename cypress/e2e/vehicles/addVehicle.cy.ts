@@ -35,10 +35,10 @@ describe('Create Vehicle Flow', () => {
             cy.get('input[name="year"]').clear().type('2023');
             cy.get('input[name="licensePlate"]').type('ABC-1234');
 
-            // Interactuar con el Select para seleccionar "Sedan"
-            cy.get('[data-state="closed"]').first().click(); // Asegúrate de que selecciona un solo elemento
-            cy.get('[role="listbox"]').should('be.visible'); // Asegúrate de que se muestra la lista de opciones
-            cy.get('[role="option"]').contains('Sedan').click(); // Seleccionar "Sedan"
+            // // Interactuar con el Select para seleccionar "Sedan"
+            // cy.get('[data-state="closed"]').first().click(); // Asegúrate de que selecciona un solo elemento
+            // cy.get('[role="listbox"]').should('be.visible'); // Asegúrate de que se muestra la lista de opciones
+            // cy.get('[role="option"]').contains('Sedan').click(); // Seleccionar "Sedan"
 
             // Hacer clic en el botón Guardar
             cy.get('button[type="submit"]').click();

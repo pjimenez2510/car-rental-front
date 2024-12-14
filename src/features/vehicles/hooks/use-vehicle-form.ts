@@ -44,7 +44,7 @@ export function useVehicleForm({ vehicle }: VehicleFormProps) {
       model: vehicle?.model || "",
       year: vehicle?.year || new Date().getFullYear(),
       licensePlate: vehicle?.licensePlate || "",
-      vehicleTypeId: vehicle?.vehicleType.id.toString() || "",
+      vehicleTypeId: vehicle?.vehicleType.id.toString() || "11",
     },
     mode: "onBlur",
   });

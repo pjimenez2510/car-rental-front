@@ -41,7 +41,7 @@ describe("useVehicleForm", () => {
       model: "",
       year: currentYear,
       licensePlate: "",
-      vehicleTypeId: "",
+      vehicleTypeId: "11",
     });
   });
 

@@ -9,10 +9,14 @@ import RHFInput from "@/components/rhf/RHFInput";
 import RHFPasswordInput from "@/components/rhf/RHFPasswordInput";
 import { useLogin } from "../../hooks/use-login-form";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 const LoginForm = () => {
   const { methods, onSubmit, isSubmiting } = useLogin();
 
+  const searchParams = useSearchParams();
+
+  const redirectPath = searchParams.get("callbackUrl");
   return (
     <>
       <FormProvider {...methods}>
@@ -44,7 +48,10 @@ const LoginForm = () => {
         </form>
         <p className="text-center text-sm">
           No tienes una cuenta?{" "}
-          <Link href="/register" className="text-blue-500 hover:underline">
+          <Link
+            href={`/register?callbackUrl=${redirectPath}`}
+            className="text-blue-500 hover:underline"
+          >
             Registrate
           </Link>
         </p>

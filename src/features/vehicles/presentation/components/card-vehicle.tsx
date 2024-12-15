@@ -18,7 +18,7 @@ interface VehicleCardProps {
 
 export default function CardVehicle({ vehicle }: VehicleCardProps) {
   return (
-    <Link href={`/vehicles/${vehicle.id}`}>
+    <Link href={`/new-reservation/${vehicle.id}`}>
       <Card className="w-full h-full overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
         <div className="relative aspect-video">
           <Image

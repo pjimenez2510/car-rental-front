@@ -18,7 +18,7 @@ describe("Delete Vehicle Flow", () => {
     cy.wait(5000); // Esperar a que se cargue la página
 
     cy.fixture("apiUrl").then((apiUrl) => {
-      cy.fixture("vehicles").then((vehicleData) => {
+      cy.fixture("vehicles").then(() => {
         // Interceptar la solicitud DELETE para eliminar un vehículo
         cy.intercept("DELETE", `${apiUrl.apiUrl}/api/v1/vehicles/48`, {
           statusCode: 200,

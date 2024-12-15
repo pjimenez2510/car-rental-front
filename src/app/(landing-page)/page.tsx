@@ -6,7 +6,6 @@ import { Award, CheckCircle, PhoneCall, ThumbsUp, Users } from "lucide-react";
 export default function Page() {
   return (
     <div className="flex min-h-screen flex-col  text-gray-900 dark:text-white">
-      {/* Hero Section */}
       <div className="container mx-auto px-4 py-20 text-center">
         <div className="mb-8 flex justify-center">
           <Badge
@@ -46,9 +45,7 @@ export default function Page() {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="container mx-auto px-4 pb-20">
-        {/* Sobre Nosotros */}
         <section className="mb-20">
           <h2 className="mb-8 text-3xl font-bold text-center">Sobre RentCar</h2>
           <div className="grid gap-8 md:grid-cols-2">
@@ -89,7 +86,6 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Por Qué Elegirnos */}
         <section className="mb-20">
           <h2 className="mb-8 text-3xl font-bold text-center">
             ¿Por Qué Elegir RentCar?
@@ -139,7 +135,6 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Recomendaciones */}
         <section>
           <h2 className="mb-8 text-3xl font-bold text-center">
             Recomendaciones para tu Viaje
@@ -193,7 +188,6 @@ export default function Page() {
         </section>
       </div>
 
-      {/* CTA Final */}
       <div className="py-12">
         <div className="container mx-auto px-4 text-center">
           <h2 className="mb-4 text-3xl font-bold">

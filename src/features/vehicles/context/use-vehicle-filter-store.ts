@@ -13,7 +13,7 @@ interface VehicleFilterStore {
 export const useVehicleFilterStore = create<VehicleFilterStore>((set) => ({
   filterParams: {
     dateRange: {
-      startDate: new Date(),
+      startDate: new Date(new Date().setDate(new Date().getDate() + 1)),
       endDate: new Date(new Date().setDate(new Date().getDate() + 3)),
     },
   },

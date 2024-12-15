@@ -25,6 +25,7 @@ interface Option {
 }
 
 interface ComboboxProps {
+  width?: string;
   options: Option[];
   placeholder?: string;
   searchPlaceholder?: string;
@@ -32,6 +33,7 @@ interface ComboboxProps {
 }
 
 export function Combobox({
+  width,
   options,
   placeholder = "Select an option...",
   searchPlaceholder = "Search...",
@@ -54,7 +56,7 @@ export function Combobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className={cn("w-[200px] justify-between", width)}
         >
           {value
             ? options.find((option) => option.value === value)?.label
@@ -62,7 +64,7 @@ export function Combobox({
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className={cn("p-0 w-[200px]", width)}>
         <Command>
           <CommandInput placeholder={searchPlaceholder} className="h-9" />
           <CommandList>

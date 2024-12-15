@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { format } from "date-fns";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -13,6 +12,7 @@ import {
 } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
 import { useVehicleFilterStore } from "@/features/vehicles/context/use-vehicle-filter-store";
+import { formatDate } from "@/lib/format-date";
 
 export function DateRangeFilter({
   className,
@@ -34,15 +34,15 @@ export function DateRangeFilter({
               !dataRange && "text-muted-foreground"
             )}
           >
-            <CalendarIcon />
+            <CalendarIcon className="mr-2" />
             {dataRange?.startDate ? (
               dataRange.endDate ? (
                 <>
-                  {format(dataRange.startDate, "LLL dd, y")} -{" "}
-                  {format(dataRange.endDate, "LLL dd, y")}
+                  {formatDate(dataRange.startDate, "LLL dd, y")} -{" "}
+                  {formatDate(dataRange.endDate, "LLL dd, y")}
                 </>
               ) : (
-                format(dataRange.startDate, "LLL dd, y")
+                formatDate(dataRange.startDate, "LLL dd, y")
               )
             ) : (
               <span>Seleciona el rango de fechas</span>
@@ -51,6 +51,7 @@ export function DateRangeFilter({
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
+            disabled={(date) => date < new Date()}
             initialFocus
             mode="range"
             defaultMonth={dataRange?.startDate}

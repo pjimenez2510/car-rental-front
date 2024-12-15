@@ -13,7 +13,6 @@ const schema = z.object({
     .min(1, "La imagen es requerida")
     .url("Debe ser una URL válida")
     .refine((url) => {
-      // Validación de formato de URL de imagen
       const imagePattern = /\.(jpg|jpeg|png|gif|webp|svg|avif)(\?.*)?$/i;
       return imagePattern.test(url);
     }, "La URL debe terminar en una extensión de imagen válida (.jpg, .jpeg, .png, .gif, .webp, .svg, .avif)"),

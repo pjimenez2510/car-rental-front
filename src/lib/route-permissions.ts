@@ -31,6 +31,10 @@ const routes: RoutesPrivate[] = [
     path: "/reservation",
     roles: [UserRole.Customer],
   },
+  {
+    path: "/new-reservation/:id",
+    roles: [UserRole.Customer],
+  },
 ];
 
 interface RoleAllowed {

@@ -10,7 +10,7 @@ const FiltersVehicle = () => {
 
   return (
     <>
-      <DateRangeFilter />
+      <DateRangeFilter className="w-full" />
       <Separator />
 
       <TypeVehicle />

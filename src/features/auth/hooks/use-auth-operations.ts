@@ -19,6 +19,7 @@ export function useAuthOperations() {
 
   const handleRedirect = (role: UserRole) => {
     const path = redirectPath ?? routesRedirectAuth[role];
+    console.log(path);
     window.location.replace(path);
   };
 

@@ -49,7 +49,11 @@ const LoginForm = () => {
         <p className="text-center text-sm">
           No tienes una cuenta?{" "}
           <Link
-            href={`/register?callbackUrl=${redirectPath}`}
+            href={
+              redirectPath
+                ? `/register?callbackUrl=${redirectPath}`
+                : "/register"
+            }
             className="text-blue-500 hover:underline"
           >
             Registrate

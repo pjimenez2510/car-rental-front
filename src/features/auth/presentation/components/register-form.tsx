@@ -22,6 +22,10 @@ const RegisterForm = () => {
         >
           <RHFInput name="firstName" label="Nombre" placeholder="Nombre" />
           <RHFInput name="lastName" label="Apellido" placeholder="Apellido" />
+          <RHFInput name="ci" label="Cedula" />
+          <RHFInput name="address" label="Direccion" />
+          <RHFInput name="phoneNumber" label="Telefono" />
+          <RHFInput name="driverLicenseNumber" label="Licencia" />
           <RHFInput
             name="username"
             label="Nombre de usuario"

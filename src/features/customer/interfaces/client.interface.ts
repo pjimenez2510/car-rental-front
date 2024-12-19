@@ -22,5 +22,5 @@ export interface CustomerUpdate extends CustomerBase {
 }
 
 export interface CustomerRequest<T> {
-  client: T;
+  customer: T;
 }

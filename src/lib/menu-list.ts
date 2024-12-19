@@ -1,5 +1,5 @@
 import { UserRole } from "@/features/users/interfaces/user.interface";
-import { Car, LucideIcon } from "lucide-react";
+import { Car, LucideIcon, Timer } from "lucide-react";
 
 type Submenu = {
   href: string;
@@ -50,6 +50,22 @@ export const getAllMenuList = (pathname: string) => {
               href: "/management/vehicles/maintenances",
               label: "Mantenimientos",
               active: pathname.startsWith("/management/vehicles/maintenances"),
+              roles: [UserRole.Admin, UserRole.Employee],
+            },
+          ],
+        },
+
+        {
+          href: "/management/reservations",
+          label: "Reservas",
+          active: pathname.startsWith("/reservations"),
+          roles: [UserRole.Admin, UserRole.Employee],
+          icon: Timer,
+          submenus: [
+            {
+              href: "/management/reservations/list",
+              label: "Listar",
+              active: pathname.startsWith("/management/reservations/list"),
               roles: [UserRole.Admin, UserRole.Employee],
             },
           ],

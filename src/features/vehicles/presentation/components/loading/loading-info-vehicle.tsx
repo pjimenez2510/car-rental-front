@@ -1,6 +1,6 @@
 import { Car } from "lucide-react";
 
-const LoadingInfoVehicle = () => {
+const LoadingInfo = () => {
   return (
     <div className="min-h-[60vh] flex items-center justify-center">
       <div className="animate-pulse flex flex-col items-center gap-4">
@@ -11,4 +11,4 @@ const LoadingInfoVehicle = () => {
   );
 };
 
-export default LoadingInfoVehicle;
+export default LoadingInfo;

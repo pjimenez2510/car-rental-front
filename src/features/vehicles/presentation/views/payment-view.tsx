@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useReservationQuery } from "../../hooks/use-reservation-query";
-import LoadingInfoVehicle from "../components/loading/loading-info-vehicle";
+import LoadingInfo from "../components/loading/loading-info-vehicle";
 import { ReservationStatus } from "../../interfaces/reservation.interface";
 import { formatDate } from "@/lib/format-date";
 import { calculateCostDay } from "../../utils/calculate-cost-day";
@@ -24,7 +24,7 @@ import { usePaymentForm } from "../../hooks/use-payment-form";
 import { FormProvider } from "react-hook-form";
 import RHFInput from "@/components/rhf/RHFInput";
 import RHFSelect from "@/components/rhf/RHFSelect";
-import InforError from "@/shared/components/info-error";
+import InfoError from "@/shared/components/info-error";
 
 interface PaymentViewProps {
   reservationId: number;
@@ -36,7 +36,7 @@ export default function PaymentView({ reservationId }: PaymentViewProps) {
   const { isSubmiting, methods, onSubmit } = usePaymentForm({ reservationId });
 
   if (isFetching) {
-    return <LoadingInfoVehicle />;
+    return <LoadingInfo />;
   }
 
   if (!reservation) {
@@ -52,7 +52,7 @@ export default function PaymentView({ reservationId }: PaymentViewProps) {
   );
 
   if (status !== ReservationStatus.Pending) {
-    return <InforError text="La reserva ya esta pagada" />;
+    return <InfoError text="La reserva ya esta pagada" />;
   }
 
   return (

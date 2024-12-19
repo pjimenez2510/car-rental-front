@@ -64,10 +64,20 @@ const useReservationOperations = () => {
     initialOdometer: number
   ) => {
     try {
+      if (initialOdometer < 0) {
+        toast.error("El kilometraje inicial no puede ser negativo");
+        return;
+      }
+
+      if (Number.isNaN(initialOdometer)) {
+        toast.error("El kilometraje inicial debe ser un número");
+        return;
+      }
+
       setLoading(true);
       await reservationService.checkout(reservationId, initialOdometer);
       toast.success("Reservación check-out correctamente");
-      router.push(`/reservations/${reservationId}`);
+      router.push(`/management/reservations/${reservationId}`);
       invalidateQuery([QUERY_KEYS.RESERVATION]);
       invalidateQuery([QUERY_KEYS.VEHICLES]);
       setLoading(false);

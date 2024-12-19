@@ -24,8 +24,8 @@ import { TermItem } from "../components/term-item";
 import { DateDisplay } from "../components/date-display";
 import useReservationOperations from "../../hooks/use-reservation-operations";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import LoadingInfoVehicle from "../components/loading/loading-info-vehicle";
-import InforError from "@/shared/components/info-error";
+import LoadingInfo from "../components/loading/loading-info-vehicle";
+import InfoError from "@/shared/components/info-error";
 
 export default function NewReservationView({
   vehicleId,
@@ -75,11 +75,11 @@ export default function NewReservationView({
   }, [vehicle]);
 
   if (isFetching) {
-    return <LoadingInfoVehicle />;
+    return <LoadingInfo />;
   }
 
   if (!vehicle) {
-    return <InforError text="No se encontro el vehículo" />;
+    return <InfoError text="No se encontro el vehículo" />;
   }
 
   return (

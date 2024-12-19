@@ -1,3 +1,4 @@
+import { Customer } from "@/features/customer/interfaces/client.interface";
 import { Vehicle } from "./vehicle.interface";
 
 export interface ReservationBase {
@@ -10,6 +11,7 @@ export interface Reservation extends ReservationBase {
   status: ReservationStatus;
   totalAmount: string;
   vehicle: Vehicle;
+  customer: Customer;
   rental: null;
 }
 
@@ -29,7 +31,7 @@ export interface ReservationRequest<T> {
 export enum ReservationStatus {
   Pending = "pending",
   Confirmed = "confirmed",
-  CheckedOut = "checked-out",
+  CheckedOut = "checked_out",
   Cancelled = "cancelled",
   Completed = "completed",
 }

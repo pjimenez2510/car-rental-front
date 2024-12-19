@@ -18,7 +18,7 @@ export const reservationStatusSpanish: Record<
     label: "Confirmada",
     color: "bg-green-600 hover:bg-green-600/50",
   },
-  "checked-out": {
+  checked_out: {
     label: "Check-out",
     color: "bg-blue-600 hover:bg-blue-600/50",
   },
@@ -28,6 +28,6 @@ export const reservationStatusSpanish: Record<
   },
   completed: {
     label: "Completada",
-    color: "bg-purple hover:bg-purple-600/50",
+    color: "bg-purple-600 hover:bg-purple-600/50",
   },
 };

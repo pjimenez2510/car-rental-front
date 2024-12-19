@@ -34,11 +34,13 @@ export class ReservationService extends BaseHttpService<
   }
 
   async checkout(id: number, initialOdometer: number) {
-    await this.http.put(`${this.baseUrl}/${id}/checkout`, { initialOdometer });
+    await this.http.post(`${this.baseUrl}/${id}/check_out`, {
+      initialOdometer,
+    });
   }
 
   async checkin(id: number, finalOdometer: number) {
-    await this.http.put(`${this.baseUrl}/${id}/checkin`, { finalOdometer });
+    await this.http.post(`${this.baseUrl}/${id}/check_in`, { finalOdometer });
   }
 
   async confirmPayment(id: number) {

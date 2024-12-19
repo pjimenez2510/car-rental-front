@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { ArrowRight, Info, Star, Car, Clock, Shield } from "lucide-react";
+import { ArrowRight, Star, Car, Clock, Shield } from "lucide-react";
 import {
   Card,
   CardHeader,
@@ -24,8 +24,14 @@ import { TermItem } from "../components/term-item";
 import { DateDisplay } from "../components/date-display";
 import useReservationOperations from "../../hooks/use-reservation-operations";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import LoadingInfoVehicle from "../components/loading/loading-info-vehicle";
+import InforError from "@/shared/components/info-error";
 
-export default function ReservationView({ vehicleId }: { vehicleId: number }) {
+export default function NewReservationView({
+  vehicleId,
+}: {
+  vehicleId: number;
+}) {
   const {
     filterParams: { dateRange },
   } = useVehicleFilterStore();
@@ -69,29 +75,11 @@ export default function ReservationView({ vehicleId }: { vehicleId: number }) {
   }, [vehicle]);
 
   if (isFetching) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="animate-pulse flex flex-col items-center gap-4">
-          <Car className="h-12 w-12 text-primary animate-bounce" />
-          <p className="text-lg font-medium">
-            Cargando información del vehículo...
-          </p>
-        </div>
-      </div>
-    );
+    return <LoadingInfoVehicle />;
   }
 
   if (!vehicle) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="text-red-500 flex flex-col items-center gap-4">
-          <Info className="h-12 w-12" />
-          <p className="text-lg font-medium">
-            No se encontró el vehículo solicitado
-          </p>
-        </div>
-      </div>
-    );
+    return <InforError text="No se encontro el vehículo" />;
   }
 
   return (
@@ -132,10 +120,8 @@ export default function ReservationView({ vehicleId }: { vehicleId: number }) {
             <TabsContent value="details" className="mt-8">
               <Card className="border-none shadow-lg">
                 <CardHeader className="pb-4">
-                  <CardTitle className="flex items-center justify-between">
-                    <h2 className="text-2xl font-semibold">
-                      Detalles del vehículo
-                    </h2>
+                  <CardTitle className="flex items-center justify-between text-2xl font-semibold">
+                    Detalles del vehículo
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -151,8 +137,8 @@ export default function ReservationView({ vehicleId }: { vehicleId: number }) {
             <TabsContent value="features" className="mt-8">
               <Card className="border-none shadow-lg">
                 <CardHeader className="pb-4">
-                  <CardTitle className="flex items-center justify-between">
-                    <h2 className="text-2xl font-semibold">Características</h2>
+                  <CardTitle className="flex items-center justify-between text-2xl font-semibold">
+                    Características
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -186,8 +172,8 @@ export default function ReservationView({ vehicleId }: { vehicleId: number }) {
 
         <Card className="h-min sticky top-24 border-none shadow-xl">
           <CardHeader className="pb-4">
-            <CardTitle className="flex items-center justify-between">
-              <h2 className="text-2xl font-semibold">Reserva ahora</h2>
+            <CardTitle className="flex items-center justify-between text-2xl font-semibold">
+              Reserva ahora
               <div className="bg-green-500 text-white px-4 py-1.5 rounded-full text-sm font-medium">
                 Disponible
               </div>
@@ -240,7 +226,6 @@ export default function ReservationView({ vehicleId }: { vehicleId: number }) {
               onClick={() => {
                 if (!dateRange?.startDate || !dateRange?.endDate) return;
                 createReservation({
-                  customerId: 1,
                   vehicleId,
                   startDate: dateRange?.startDate?.toISOString().split("T")[0],
                   endDate: dateRange?.endDate?.toISOString().split("T")[0],

@@ -5,6 +5,9 @@ import { ReservationCreate } from "../interfaces/reservation.interface";
 import { ReservationService } from "../services/reservation.service";
 import { toast } from "sonner";
 import { useState } from "react";
+import { invalidateQuery } from "@/lib/invalidate-query";
+import { QUERY_KEYS } from "@/shared/api/query-key";
+import { wait } from "@/lib/wait";
 
 const useReservationOperations = () => {
   const [loading, setLoading] = useState(false);
@@ -18,6 +21,8 @@ const useReservationOperations = () => {
       const response = await reservationService.create({ reservation: params });
       toast.success("Reservación creada correctamente");
       router.push(`/reservations/${response.id}`);
+      invalidateQuery([QUERY_KEYS.RESERVATION]);
+      invalidateQuery([QUERY_KEYS.VEHICLES]);
       setLoading(false);
     } catch (error: unknown) {
       setError(error as string);
@@ -31,6 +36,8 @@ const useReservationOperations = () => {
       await reservationService.update(id, { reservation: params });
       toast.success("Reservación actualizada correctamente");
       router.push(`/reservations/${id}`);
+      invalidateQuery([QUERY_KEYS.RESERVATION]);
+      invalidateQuery([QUERY_KEYS.VEHICLES]);
       setLoading(false);
     } catch (error) {
       setError(error as string);
@@ -43,7 +50,8 @@ const useReservationOperations = () => {
       setLoading(true);
       await reservationService.cancel(reservationId);
       toast.success("Reservación cancelada correctamente");
-      router.push("/reservations");
+      invalidateQuery([QUERY_KEYS.RESERVATION]);
+      invalidateQuery([QUERY_KEYS.VEHICLES]);
       setLoading(false);
     } catch (error) {
       setError(error as string);
@@ -60,6 +68,8 @@ const useReservationOperations = () => {
       await reservationService.checkout(reservationId, initialOdometer);
       toast.success("Reservación check-out correctamente");
       router.push(`/reservations/${reservationId}`);
+      invalidateQuery([QUERY_KEYS.RESERVATION]);
+      invalidateQuery([QUERY_KEYS.VEHICLES]);
       setLoading(false);
     } catch (error) {
       setError(error as string);
@@ -76,6 +86,24 @@ const useReservationOperations = () => {
       await reservationService.checkin(reservationId, finalOdometer);
       toast.success("Reservación check-in correctamente");
       router.push(`/reservations/${reservationId}`);
+      invalidateQuery([QUERY_KEYS.RESERVATION]);
+      invalidateQuery([QUERY_KEYS.VEHICLES]);
+      setLoading(false);
+    } catch (error) {
+      setError(error as string);
+      setLoading(false);
+    }
+  };
+
+  const confirmPayment = async (reservationId: number) => {
+    try {
+      setLoading(true);
+      await wait(2);
+      await reservationService.confirmPayment(reservationId);
+      toast.success("Pago confirmado correctamente");
+      router.push(`/reservations/${reservationId}`);
+      invalidateQuery([QUERY_KEYS.RESERVATION]);
+      invalidateQuery([QUERY_KEYS.VEHICLES]);
       setLoading(false);
     } catch (error) {
       setError(error as string);
@@ -91,6 +119,7 @@ const useReservationOperations = () => {
     checkinReservation,
     loading,
     error,
+    confirmPayment,
   };
 };
 

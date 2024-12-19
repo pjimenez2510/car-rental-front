@@ -1,3 +1,5 @@
+import { Vehicle } from "./vehicle.interface";
+
 export interface ReservationBase {
   startDate: string;
   endDate: string;
@@ -7,11 +9,11 @@ export interface Reservation extends ReservationBase {
   id: number;
   status: ReservationStatus;
   totalAmount: string;
+  vehicle: Vehicle;
   rental: null;
 }
 
 export interface ReservationCreate extends ReservationBase {
-  customerId: number;
   vehicleId: number;
 }
 

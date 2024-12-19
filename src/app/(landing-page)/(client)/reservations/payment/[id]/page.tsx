@@ -1,4 +1,5 @@
-import NewReservationView from "@/features/vehicles/presentation/views/new-reservation-view";
+import PaymentView from "@/features/vehicles/presentation/views/payment-view";
+
 interface Props {
   params: {
     id: string;
@@ -10,5 +11,5 @@ export default function Page({ params }: Props) {
     return <div>Invalid ID</div>;
   }
 
-  return <NewReservationView vehicleId={Number(params.id)} />;
+  return <PaymentView reservationId={Number(params.id)} />;
 }

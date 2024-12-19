@@ -42,9 +42,9 @@ const routeList = (path: string): RouteProps[] => [
     },
   },
   {
-    href: "/reservation",
+    href: "/reservations",
     label: "Reservas",
-    active: path.startsWith("/reservation"),
+    active: path.startsWith("/reservations"),
     isShow: (role?: UserRole) => {
       if (!role) return false;
       const isRoleAllowed = [UserRole.Customer].includes(role);

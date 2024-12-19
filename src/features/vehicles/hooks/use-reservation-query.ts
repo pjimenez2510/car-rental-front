@@ -18,3 +18,21 @@ export const useCalculateCost = (params: CalculateCostRequest) => {
 
   return query;
 };
+
+export const useReservationQuery = (id: number) => {
+  const query = useQuery({
+    queryKey: [QUERY_KEYS.RESERVATION, String(id)],
+    queryFn: async () => await ReservationService.getInstance().getById(id),
+  });
+
+  return query;
+};
+
+export const useReservationsQuery = () => {
+  const query = useQuery({
+    queryKey: [QUERY_KEYS.RESERVATION],
+    queryFn: async () => await ReservationService.getInstance().getAll(),
+  });
+
+  return query;
+};

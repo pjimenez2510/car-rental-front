@@ -28,7 +28,15 @@ const routes: RoutesPrivate[] = [
     roles: [UserRole.Admin, UserRole.Employee],
   },
   {
-    path: "/reservation",
+    path: "/reservations",
+    roles: [UserRole.Customer],
+  },
+  {
+    path: "/reservations/:id",
+    roles: [UserRole.Customer],
+  },
+  {
+    path: "/reservations/payment/:id",
     roles: [UserRole.Customer],
   },
   {

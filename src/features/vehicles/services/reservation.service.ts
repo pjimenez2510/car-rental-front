@@ -22,15 +22,15 @@ export class ReservationService extends BaseHttpService<
   async calculateCost(
     request: CalculateCostRequest
   ): Promise<CalculateCostResponse> {
-    const { data } = await this.http.post<CalculateCostResponse>(
+    const { data } = await this.http.get<CalculateCostResponse>(
       `${this.baseUrl}/calculate_cost`,
-      request
+      { params: request }
     );
     return data.data;
   }
 
   async cancel(id: number) {
-    await this.http.put(`${this.baseUrl}/${id}/cancel`);
+    await this.http.delete(`${this.baseUrl}/${id}/cancel`);
   }
 
   async checkout(id: number, initialOdometer: number) {
@@ -42,6 +42,6 @@ export class ReservationService extends BaseHttpService<
   }
 
   async confirmPayment(id: number) {
-    await this.http.put(`${this.baseUrl}/${id}/payments/process_payment`);
+    await this.http.post(`${this.baseUrl}/${id}/payments/process_payment`);
   }
 }

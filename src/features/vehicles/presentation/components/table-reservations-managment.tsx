@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import LoadingTableVehicle from "./loading/loading-table-vehicle";
+import LoadingTable from "./loading/loading-table";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
@@ -58,7 +58,7 @@ const TableReservationManagement: React.FC<TableReservationProps> = ({
       />
 
       {isFetching ? (
-        <LoadingTableVehicle />
+        <LoadingTable />
       ) : (
         <Table>
           <TableHeader>

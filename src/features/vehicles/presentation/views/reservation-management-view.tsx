@@ -24,6 +24,7 @@ import LoadingInfo from "../components/loading/loading-info-vehicle";
 import InfoError from "@/shared/components/info-error";
 import { reservationStatusSpanish } from "../../constants/status-reservation-spanish";
 import { cn } from "@/lib/utils";
+import { vehicleStatusSpanish } from "../../constants/status-vehicle-spanish";
 
 interface ReservationManagementViewProps {
   reservationId: number;
@@ -111,8 +112,12 @@ export default function ReservationManagementView({
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Estado</span>
-                <Badge variant="outline">
-                  {reservationData.vehicle.status}
+                <Badge
+                  className={cn([
+                    vehicleStatusSpanish[reservationData.vehicle.status].color,
+                  ])}
+                >
+                  {vehicleStatusSpanish[reservationData.vehicle.status].label}
                 </Badge>
               </div>
             </div>
@@ -251,11 +256,6 @@ export default function ReservationManagementView({
                       </p>
                     )}
                   </div>
-                </div>
-                <Separator />
-                <div className="flex justify-between items-center">
-                  <span className="font-medium">Estado del Alquiler</span>
-                  <Badge>{reservationData.rental.status}</Badge>
                 </div>
               </div>
             </CardContent>

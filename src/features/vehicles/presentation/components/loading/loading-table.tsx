@@ -8,21 +8,25 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const LoadingTableVehicle = () => {
+const LoadingTable = () => {
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Marca</TableHead>
-          <TableHead>Modelo</TableHead>
-          <TableHead>Placa</TableHead>
-          <TableHead>Tipo</TableHead>
-          <TableHead>Estado</TableHead>
+          <TableHead>Cargando...</TableHead>
+          <TableHead>Cargando...</TableHead>
+          <TableHead>Cargando...</TableHead>
+          <TableHead>Cargando...</TableHead>
+          <TableHead>Cargando...</TableHead>
+          <TableHead>Cargando...</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {[...Array(20)].map((_, index) => (
           <TableRow key={index}>
+            <TableCell>
+              <Skeleton className="h-4 " />
+            </TableCell>
             <TableCell>
               <Skeleton className="h-4 " />
             </TableCell>
@@ -45,4 +49,4 @@ const LoadingTableVehicle = () => {
   );
 };
 
-export default LoadingTableVehicle;
+export default LoadingTable;

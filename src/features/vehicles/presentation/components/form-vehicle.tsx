@@ -89,7 +89,7 @@ export const VehicleForm = ({ vehicle, optionsVehicleType }: FormProps) => {
     if (selectedBrand && (!vehicle || vehicle.brand !== selectedBrand)) {
       methods.setValue("model", "");
     }
-  }, [selectedBrand, vehicle]);
+  }, [methods, selectedBrand, vehicle]);
 
   return (
     <FormProvider {...methods}>

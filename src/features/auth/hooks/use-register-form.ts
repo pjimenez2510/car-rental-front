@@ -7,10 +7,20 @@ import { useAuthOperations } from "./use-auth-operations";
 import useCustomerOperations from "@/features/customer/hooks/use-customer-operations";
 
 const schema = z.object({
-  ci: z.string().min(1, "La cédula es requerida"),
+  ci: z
+    .string()
+    .regex(/^\d+$/, "La cedula solo debe contener digitos")
+    .max(10, "La cedula debe tener 10 dígitos")
+    .min(10, "La cedula debe tener 10 dígitos"),
   address: z.string().min(1, "La dirección es requerida"),
-  phoneNumber: z.string().min(1, "El número de teléfono es requerido"),
-  driverLicenseNumber: z.string().min(1, "El número de licencia es requerido"),
+  phoneNumber: z
+    .string()
+    .regex(/^\d+$/, "El número de teléfono solo debe contener digitos")
+    .min(8, "El número de teléfono debe tener al menos 8 dígitos"),
+  driverLicenseNumber: z
+    .string()
+    .regex(/^[A-Z0-9]+$/, "La licencia no cumple el formato ej: A123456789")
+    .min(1, "El número de licencia es requerido"),
   firstName: z.string().min(1, "El nombre es requerido"),
   lastName: z.string().min(1, "El apellido es requerido"),
   username: z.string().min(1, "El nombre de usuario es requerido"),
@@ -31,7 +41,7 @@ export function useRegister() {
   const methods = useForm<FormFields>({
     resolver: zodResolver(schema),
     defaultValues: {
-      ci: "",
+      ci: undefined,
       address: "",
       phoneNumber: "",
       driverLicenseNumber: "",

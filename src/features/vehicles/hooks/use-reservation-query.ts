@@ -1,3 +1,5 @@
+"use client";
+
 import { QUERY_KEYS } from "@/shared/api/query-key";
 import { useQuery } from "@tanstack/react-query";
 import { CalculateCostRequest } from "../interfaces/calculate-cost.interface";

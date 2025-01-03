@@ -1,18 +1,15 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useState } from "react";
 import { invalidateQuery } from "@/lib/invalidate-query";
 import { QUERY_KEYS } from "@/shared/api/query-key";
 import { CustomerService } from "../services/customer.service";
 import { Customer, CustomerCreate } from "../interfaces/client.interface";
-import { create } from "domain";
 
 const useCustomerOperations = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
   const service = CustomerService.getInstance();
 
   const createCustomer = async (

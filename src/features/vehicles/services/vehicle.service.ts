@@ -26,4 +26,11 @@ export class VehicleService extends BaseHttpService<
     );
     return data.data[this.pluralResponseKey];
   }
+
+  async getALl(): Promise<Vehicle[]> {
+    const { data } = await this.http.get<DataResponse<Vehicle[]>>(
+      `${this.baseUrl}/all`
+    );
+    return data.data[this.pluralResponseKey];
+  }
 }

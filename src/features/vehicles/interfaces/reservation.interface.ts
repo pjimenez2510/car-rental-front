@@ -1,5 +1,6 @@
 import { Customer } from "@/features/customer/interfaces/client.interface";
 import { Vehicle } from "./vehicle.interface";
+import { Rental } from "./rental.interface";
 
 export interface ReservationBase {
   startDate: string;
@@ -12,7 +13,7 @@ export interface Reservation extends ReservationBase {
   totalAmount: string;
   vehicle: Vehicle;
   customer: Customer;
-  rental: null;
+  rental?: Rental;
 }
 
 export interface ReservationCreate extends ReservationBase {

@@ -23,6 +23,9 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ReservationStatus } from "../../interfaces/reservation.interface";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { formatDate } from "@/lib/format-date";
+import { useCheckParametersQuery } from "../../hooks/use-check-parameter-query";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface CheckInViewProps {
   reservationId: number;
@@ -31,6 +34,9 @@ interface CheckInViewProps {
 export default function CheckInView({ reservationId }: CheckInViewProps) {
   const { checkinReservation, loading } = useReservationOperations();
   const { data: reservation, isFetching } = useReservationQuery(reservationId);
+  const { data: checkParameters, isFetching: isFetchingCheckParam } =
+    useCheckParametersQuery();
+
   const [mileage, setMileage] = useState("");
 
   if (isFetching) {
@@ -86,9 +92,14 @@ export default function CheckInView({ reservationId }: CheckInViewProps) {
             <div className="flex items-center gap-2">
               <Car className="h-5 w-5 text-muted-foreground" />
               <div>
-                <p className="font-medium">{reservation.vehicle.model}</p>
+                <p className="font-medium">
+                  {reservation.vehicle.model} {reservation.vehicle.brand}
+                </p>
                 <p className="text-sm text-muted-foreground">
                   Placa: {reservation.vehicle.licensePlate}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Tipo: {reservation.vehicle.vehicleType.name}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   Año: {reservation.vehicle.year}
@@ -101,10 +112,10 @@ export default function CheckInView({ reservationId }: CheckInViewProps) {
               <div>
                 <p className="font-medium">Fechas de Reserva</p>
                 <p className="text-sm text-muted-foreground">
-                  Recogida: {new Date(reservation.startDate).toLocaleString()}
+                  Recogida: {formatDate(reservation.startDate, "mm/dd/yyyy")}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  Devolución: {new Date(reservation.endDate).toLocaleString()}
+                  Devolución: {formatDate(reservation.endDate, "mm/dd/yyyy")}
                 </p>
               </div>
             </div>
@@ -168,6 +179,39 @@ export default function CheckInView({ reservationId }: CheckInViewProps) {
                 }}
                 required
               />
+            </div>
+
+            <div className="grid grid-cols-2 space-y-2">
+              {!isFetchingCheckParam &&
+                checkParameters?.map((param) => {
+                  if (
+                    param.vehicleType.toLowerCase() !==
+                    reservation.vehicle.vehicleType.name.toLowerCase()
+                  )
+                    return;
+                  return (
+                    <div key={param.id} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={param.id.toString()}
+                        defaultChecked={true}
+                      />
+                      <label
+                        htmlFor="terms"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        {param.name}
+                      </label>
+                    </div>
+                  );
+                })}
+            </div>
+
+            <Separator />
+
+            <div>
+              <p className="text-muted-foreground">
+                Por favor, revise el vehículo y registre el kilometraje actual
+              </p>
             </div>
           </CardContent>
           <CardFooter>

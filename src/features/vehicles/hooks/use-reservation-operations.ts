@@ -95,7 +95,7 @@ const useReservationOperations = () => {
       setLoading(true);
       await reservationService.checkin(reservationId, finalOdometer);
       toast.success("Reservación check-in correctamente");
-      router.push(`/reservations/${reservationId}`);
+      router.push(`/management/reservations/${reservationId}`);
       invalidateQuery([QUERY_KEYS.RESERVATION]);
       invalidateQuery([QUERY_KEYS.VEHICLES]);
       setLoading(false);

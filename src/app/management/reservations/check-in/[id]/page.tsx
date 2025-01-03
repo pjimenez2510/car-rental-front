@@ -1,6 +1,5 @@
 import { ContentLayout } from "@/core/layout/content/content-layout";
 import CheckInView from "@/features/vehicles/presentation/views/check-in-view";
-import CheckOutView from "@/features/vehicles/presentation/views/check-out-view";
 
 interface EditPageProps {
   params: {

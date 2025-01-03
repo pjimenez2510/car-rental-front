@@ -31,6 +31,7 @@ export abstract class BaseHttpService<T, CreateParams, UpdateParams> {
 
   async getAll(): Promise<T[]> {
     const { data } = await this.http.get<DataResponse<T[]>>(this.baseUrl);
+    console.log(data);
     return data.data[this.pluralResponseKey];
   }
 

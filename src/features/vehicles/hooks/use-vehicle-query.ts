@@ -8,7 +8,7 @@ import { VehicleFilterParams } from "../interfaces/vehicle-filter-params.interfa
 export const useVehiclesQuery = () => {
   const query = useQuery({
     queryKey: [QUERY_KEYS.VEHICLES],
-    queryFn: async () => await VehicleService.getInstance().getAll(),
+    queryFn: async () => await VehicleService.getInstance().getALl(),
   });
 
   return query;

@@ -1,5 +1,6 @@
+import { Vehicle } from "./vehicle.interface";
+
 export interface MaintenanceBase {
-  vehicleId: number;
   description: string;
   startDate: string;
   endDate: string;
@@ -9,11 +10,16 @@ export interface MaintenanceBase {
 export interface Maintenance extends MaintenanceBase {
   id: number;
   status: MaintenanceStatus;
+  vehicle: Vehicle;
 }
 
-export type MaintenanceCreate = MaintenanceBase;
+export interface MaintenanceCreate extends MaintenanceBase {
+  vehicleId: number;
+}
 
-export type MaintenanceUpdate = Partial<MaintenanceBase>;
+export interface MaintenanceUpdate extends Partial<MaintenanceBase> {
+  vehicleId?: number | undefined;
+}
 
 export enum MaintenanceStatus {
   Scheduled = "Scheduled",

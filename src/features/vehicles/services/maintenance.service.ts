@@ -11,7 +11,7 @@ export class MaintenaceService extends BaseHttpService<
   MaintenanceRequest<MaintenanceCreate>,
   MaintenanceRequest<MaintenanceUpdate>
 > {
-  protected baseUrl: string = "api/v1/maintenance";
+  protected baseUrl: string = "api/v1/maintenances";
   protected singleResponseKey: string = "maintenance";
   protected pluralResponseKey: string = "maintenances";
 }

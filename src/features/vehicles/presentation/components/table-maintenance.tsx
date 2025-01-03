@@ -6,7 +6,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import LoadingTable from "./loading/loading-table";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -18,7 +17,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useMaintenancesQuery } from "../../hooks/use-maintenance-query";
 import { maintenanceStatusSpanish } from "../../constants/status-maintenance-spanish";
 import { MaintenanceStatus } from "../../interfaces/maintenace.interface";
@@ -32,10 +30,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { MaintenaceService } from "../../services/maintenance.service";
+import { invalidateQuery } from "@/lib/invalidate-query";
+import { QUERY_KEYS } from "@/shared/api/query-key";
 
 const TableMaintenace = () => {
-  const router = useRouter();
-  const { data: maintanance, isFetching } = useMaintenancesQuery();
+  const { data: maintanance } = useMaintenancesQuery();
 
   // Estados para los filtros
   const [filterLicensePlate, setFilterLicensePlate] = useState<string>("");
@@ -53,9 +53,7 @@ const TableMaintenace = () => {
     return licensePlateMatch && statusMatch;
   });
 
-  return isFetching ? (
-    <LoadingTable />
-  ) : (
+  return (
     <>
       <div className="mb-4 flex flex-col md:flex-row gap-4">
         <Input
@@ -121,38 +119,61 @@ const TableMaintenace = () => {
               </TableCell>
               <TableCell>{maintenance.vehicle.licensePlate}</TableCell>
               <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
-                      <span className="sr-only">Open menu</span>
-                      <MoreHorizontal />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                    <DropdownMenuItem
-                      onClick={() =>
-                        router.push(
-                          `/management/vehicles/maintenace/${maintenance.id}`
-                        )
-                      }
-                    >
-                      Ver
-                    </DropdownMenuItem>
+                {maintenance.status !== MaintenanceStatus.Completed && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-8 p-0">
+                        <span className="sr-only">Open menu</span>
+                        <MoreHorizontal />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuLabel>Acciones</DropdownMenuLabel>
 
-                    {maintenance.status !== MaintenanceStatus.Completed && (
-                      <DropdownMenuItem onClick={() => {}}>
+                      <DropdownMenuItem
+                        onClick={async () => {
+                          try {
+                            await MaintenaceService.getInstance().update(
+                              maintenance.id,
+                              {
+                                maintenance: {
+                                  status: MaintenanceStatus.Completed,
+                                },
+                              }
+                            );
+                            invalidateQuery([QUERY_KEYS.MAINTENANCE]);
+                          } catch (error) {
+                            console.error(error);
+                          }
+                        }}
+                      >
                         Completar
                       </DropdownMenuItem>
-                    )}
 
-                    {maintenance.status !== MaintenanceStatus.Scheduled && (
-                      <DropdownMenuItem onClick={() => {}}>
-                        En progreso
-                      </DropdownMenuItem>
-                    )}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                      {maintenance.status === MaintenanceStatus.Scheduled && (
+                        <DropdownMenuItem
+                          onClick={async () => {
+                            try {
+                              await MaintenaceService.getInstance().update(
+                                maintenance.id,
+                                {
+                                  maintenance: {
+                                    status: MaintenanceStatus.InProgress,
+                                  },
+                                }
+                              );
+                              invalidateQuery([QUERY_KEYS.MAINTENANCE]);
+                            } catch (error) {
+                              console.error(error);
+                            }
+                          }}
+                        >
+                          En progreso
+                        </DropdownMenuItem>
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
               </TableCell>
             </TableRow>
           ))}

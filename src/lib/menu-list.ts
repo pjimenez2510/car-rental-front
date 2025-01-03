@@ -56,19 +56,12 @@ export const getAllMenuList = (pathname: string) => {
         },
 
         {
-          href: "/management/reservations",
+          href: "/management/reservations/list",
           label: "Reservas",
-          active: pathname.startsWith("/reservations"),
+          active: pathname.startsWith("/management/reservations/list"),
           roles: [UserRole.Admin, UserRole.Employee],
           icon: Timer,
-          submenus: [
-            {
-              href: "/management/reservations/list",
-              label: "Listar",
-              active: pathname.startsWith("/management/reservations/list"),
-              roles: [UserRole.Admin, UserRole.Employee],
-            },
-          ],
+          submenus: [],
         },
       ],
     },

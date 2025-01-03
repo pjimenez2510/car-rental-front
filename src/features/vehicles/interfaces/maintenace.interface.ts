@@ -19,6 +19,7 @@ export interface MaintenanceCreate extends MaintenanceBase {
 
 export interface MaintenanceUpdate extends Partial<MaintenanceBase> {
   vehicleId?: number | undefined;
+  status?: MaintenanceStatus | undefined;
 }
 
 export enum MaintenanceStatus {

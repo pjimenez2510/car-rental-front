@@ -156,20 +156,23 @@ export const Navbar = () => {
                 </SheetHeader>
 
                 <div className="flex flex-col gap-2">
-                  {routes.map(({ href, label, active }) => (
-                    <Button
-                      key={href}
-                      onClick={() => setIsOpen(false)}
-                      asChild
-                      variant="ghost"
-                      className={cn([
-                        "justify-start text-base",
-                        active && "bg-accent",
-                      ])}
-                    >
-                      <Link href={href}>{label}</Link>
-                    </Button>
-                  ))}
+                  {routes.map(
+                    ({ href, label, active, isShow }) =>
+                      isShow(sesion.data?.user?.role as UserRole) && (
+                        <Button
+                          key={href}
+                          onClick={() => setIsOpen(false)}
+                          asChild
+                          variant="ghost"
+                          className={cn([
+                            "justify-start text-base",
+                            active && "bg-accent",
+                          ])}
+                        >
+                          <Link href={href}>{label}</Link>
+                        </Button>
+                      )
+                  )}
                 </div>
               </div>
             </SheetContent>

@@ -18,6 +18,8 @@ import { reservationStatusSpanish } from "../../constants/status-reservation-spa
 import { calculateCostDay } from "../../utils/calculate-cost-day";
 import { ReservationStatus } from "../../interfaces/reservation.interface";
 import Link from "next/link";
+import LoadingInfo from "../components/loading/loading-info-vehicle";
+import InfoError from "@/shared/components/info-error";
 
 interface ReservationClientViewProps {
   reservationId: number;
@@ -29,11 +31,11 @@ export default function ReservationClientView({
   const { data: reservation, isFetching } = useReservationQuery(reservationId);
 
   if (isFetching) {
-    return <div>Loading...</div>;
+    return <LoadingInfo />;
   }
 
   if (!reservation) {
-    return <div>Reserva no encontrada</div>;
+    return <InfoError text="No se encontró la reserva" />;
   }
 
   const { vehicle, endDate, id, startDate, status, totalAmount } = reservation;

@@ -3,7 +3,7 @@ import { Vehicle } from "./vehicle.interface";
 export interface MaintenanceBase {
   description: string;
   startDate: string;
-  endDate: string;
+  endDate?: string;
   cost: number;
 }
 

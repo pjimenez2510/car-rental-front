@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { User, Car, CalendarDays, MapPin } from "lucide-react";
+import { User, Car, CalendarDays, MapPin, Save, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { reservationStatusSpanish } from "../../constants/status-reservation-spanish";
@@ -24,8 +24,25 @@ import { Button } from "@/components/ui/button";
 import { ReservationStatus } from "../../interfaces/reservation.interface";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { formatDate } from "@/lib/format-date";
-import { useCheckParametersQuery } from "../../hooks/use-check-parameter-query";
-import { Checkbox } from "@/components/ui/checkbox";
+import { FormProvider } from "react-hook-form";
+import { useMaintenanceForm } from "../../hooks/use-maintanance-form";
+import RHFInput from "@/components/rhf/RHFInput";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { AlertDialogHeader } from "@/components/ui/alert-dialog";
+import { useMaintenancesQuery } from "../../hooks/use-maintenance-query";
+import { MaintenanceStatus } from "../../interfaces/maintenace.interface";
+import { MaintenaceService } from "../../services/maintenance.service";
+import { invalidateQuery } from "@/lib/invalidate-query";
+import { toast } from "sonner";
+import { QUERY_KEYS } from "@/shared/api/query-key";
 
 interface CheckInViewProps {
   reservationId: number;
@@ -34,10 +51,12 @@ interface CheckInViewProps {
 export default function CheckInView({ reservationId }: CheckInViewProps) {
   const { checkinReservation, loading } = useReservationOperations();
   const { data: reservation, isFetching } = useReservationQuery(reservationId);
-  const { data: checkParameters, isFetching: isFetchingCheckParam } =
-    useCheckParametersQuery();
-
   const [mileage, setMileage] = useState("");
+  const { isSubmiting, methods, onSubmit } = useMaintenanceForm({
+    vehicleId: reservation?.vehicle.id ?? 0,
+  });
+
+  const { data: maintenances } = useMaintenancesQuery();
 
   if (isFetching) {
     return <LoadingInfo />;
@@ -49,6 +68,16 @@ export default function CheckInView({ reservationId }: CheckInViewProps) {
   if (reservation.status !== ReservationStatus.CheckedOut) {
     return <InfoError text="La reserva ya ha sido recibida" />;
   }
+
+  const deleteMaintenance = async (id: number) => {
+    try {
+      await MaintenaceService.getInstance().delete(id);
+      invalidateQuery([QUERY_KEYS.MAINTENANCE]);
+      toast.success("Mantenimiento eliminado");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="container mx-auto py-10 px-4">
@@ -180,34 +209,81 @@ export default function CheckInView({ reservationId }: CheckInViewProps) {
                 required
               />
             </div>
-
-            <div className="grid grid-cols-2 space-y-2">
-              {!isFetchingCheckParam &&
-                checkParameters?.map((param) => {
-                  if (
-                    param.vehicleType.toLowerCase() !==
-                    reservation.vehicle.vehicleType.name.toLowerCase()
-                  )
-                    return;
-                  return (
-                    <div key={param.id} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={param.id.toString()}
-                        defaultChecked={true}
-                      />
-                      <label
-                        htmlFor="terms"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        {param.name}
-                      </label>
-                    </div>
-                  );
-                })}
-            </div>
-
             <Separator />
 
+            <Dialog>
+              <DialogTrigger asChild>
+                <div className="flex items-center justify-between">
+                  <span>Registro de daños</span>
+
+                  <Button variant="secondary">Agregar mantenimiento</Button>
+                </div>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <AlertDialogHeader>
+                  <DialogTitle>Agregar mantenimientos</DialogTitle>
+                  <DialogDescription>
+                    Registre los mantenimientos realizados al vehículo
+                  </DialogDescription>
+                </AlertDialogHeader>
+                <FormProvider {...methods}>
+                  <form
+                    onSubmit={methods.handleSubmit(onSubmit)}
+                    className="flex flex-col items-center w-full max-w-xl"
+                  >
+                    <RHFInput name="description" label="Descripcion" />
+                    <RHFInput name="cost" label="Costo" />
+
+                    <DialogFooter className="space-x-2 mt-5">
+                      <DialogClose asChild>
+                        <Button type="button" variant={"secondary"}>
+                          Cancelar
+                        </Button>
+                      </DialogClose>
+                      <Button
+                        disabled={isSubmiting}
+                        type="submit"
+                        className="space-x-2"
+                      >
+                        {isSubmiting ? <LoadingSpinner /> : <Save />}
+                        <span>Guardar</span>
+                      </Button>
+                    </DialogFooter>
+                  </form>
+                </FormProvider>
+              </DialogContent>
+            </Dialog>
+
+            {maintenances
+              ?.filter(
+                (maintenance) =>
+                  maintenance.vehicle.id === reservation.vehicle.id &&
+                  maintenance.status !== MaintenanceStatus.Completed
+              )
+              .map((maintenance) => (
+                <div
+                  key={maintenance.id}
+                  className="flex items-center justify-between bg-slate-50 dark:bg-neutral-900 p-2 rounded-md"
+                >
+                  <div className="flex items-center gap-2">
+                    <Car className="h-5 w-5 text-muted-foreground" />
+                    <div>
+                      <p className="font-medium">{maintenance.description}</p>
+                      <p className="text-sm text-muted-foreground">
+                        Costo: {maintenance.cost}
+                      </p>
+                    </div>
+                  </div>
+                  <Button
+                    variant="destructive"
+                    onClick={() => deleteMaintenance(maintenance.id)}
+                  >
+                    <Trash2 />
+                  </Button>
+                </div>
+              ))}
+
+            <Separator />
             <div>
               <p className="text-muted-foreground">
                 Por favor, revise el vehículo y registre el kilometraje actual

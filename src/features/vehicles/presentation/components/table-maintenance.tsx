@@ -20,7 +20,6 @@ import { MoreHorizontal } from "lucide-react";
 import { useMaintenancesQuery } from "../../hooks/use-maintenance-query";
 import { maintenanceStatusSpanish } from "../../constants/status-maintenance-spanish";
 import { MaintenanceStatus } from "../../interfaces/maintenace.interface";
-import { formatDate } from "@/lib/format-date";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
@@ -41,7 +40,6 @@ const TableMaintenace = () => {
   const [filterLicensePlate, setFilterLicensePlate] = useState<string>("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
 
-  // Filtrar los datos
   const filteredMaintenance = maintanance?.filter((maintenance) => {
     const licensePlateMatch = maintenance.vehicle.licensePlate
       .toLowerCase()
@@ -84,11 +82,9 @@ const TableMaintenace = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Fecha de Inicio</TableHead>
-            <TableHead>Fecha de Fin</TableHead>
+            <TableHead>Descripción</TableHead>
             <TableHead>Estado</TableHead>
             <TableHead>Costo</TableHead>
-            <TableHead>Descripción</TableHead>
             <TableHead>Vehículo</TableHead>
             <TableHead>Placa</TableHead>
             <TableHead>Acciones</TableHead>
@@ -97,12 +93,7 @@ const TableMaintenace = () => {
         <TableBody>
           {filteredMaintenance?.map((maintenance) => (
             <TableRow key={maintenance.id}>
-              <TableCell>
-                {formatDate(maintenance.startDate, "dd/mm/yyyy")}
-              </TableCell>
-              <TableCell>
-                {formatDate(maintenance.endDate, "dd/mm/yyyy")}
-              </TableCell>
+              <TableCell>{maintenance.description}</TableCell>
               <TableCell>
                 <Badge
                   className={cn([
@@ -113,7 +104,6 @@ const TableMaintenace = () => {
                 </Badge>
               </TableCell>
               <TableCell>{maintenance.cost}</TableCell>
-              <TableCell>{maintenance.description}</TableCell>
               <TableCell>
                 {maintenance.vehicle.brand} {maintenance.vehicle?.model}{" "}
               </TableCell>
@@ -142,6 +132,8 @@ const TableMaintenace = () => {
                               }
                             );
                             invalidateQuery([QUERY_KEYS.MAINTENANCE]);
+                            invalidateQuery([QUERY_KEYS.RESERVATION]);
+                            invalidateQuery([QUERY_KEYS.VEHICLES]);
                           } catch (error) {
                             console.error(error);
                           }
@@ -163,6 +155,8 @@ const TableMaintenace = () => {
                                 }
                               );
                               invalidateQuery([QUERY_KEYS.MAINTENANCE]);
+                              invalidateQuery([QUERY_KEYS.RESERVATION]);
+                              invalidateQuery([QUERY_KEYS.VEHICLES]);
                             } catch (error) {
                               console.error(error);
                             }

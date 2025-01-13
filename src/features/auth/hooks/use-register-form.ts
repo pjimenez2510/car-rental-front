@@ -5,6 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { useAuthOperations } from "./use-auth-operations";
 import useCustomerOperations from "@/features/customer/hooks/use-customer-operations";
+import { Customer } from "@/features/customer/interfaces/client.interface";
 
 const schema = z.object({
   ci: z
@@ -37,7 +38,7 @@ type FormFields = z.infer<typeof schema>;
 
 export function useRegister() {
   const { loginHandler } = useAuthOperations();
-  const { createCustomer } = useCustomerOperations();
+  const { createCustomer, verifyEmail } = useCustomerOperations();
   const methods = useForm<FormFields>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -52,23 +53,30 @@ export function useRegister() {
       password: "",
     },
   });
+  let isValidEmail;
+  let customer:Customer | null ;
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    const customer = await createCustomer({
-      ci: data.ci,
-      address: data.address,
-      phoneNumber: data.phoneNumber,
-      driverLicenseNumber: data.driverLicenseNumber,
-      user: {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        username: data.username,
-        email: data.email,
-        password: data.password,
-      },
-    });
 
-    if (!customer) return;
+    isValidEmail = await verifyEmail({ email: data.email });
+
+    if (isValidEmail === true ) {
+      customer = await createCustomer({
+        ci: data.ci,
+        address: data.address,
+        phoneNumber: data.phoneNumber,
+        driverLicenseNumber: data.driverLicenseNumber,
+        user: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          username: data.username,
+          email: data.email,
+          password: data.password,
+        },
+      });
+    }
+    
+    if (!customer || !isValidEmail) return;
 
     await loginHandler({
       email: customer.user.email,
@@ -76,5 +84,5 @@ export function useRegister() {
     });
   };
 
-  return { onSubmit, methods, isSubmiting: methods.formState.isSubmitting };
+  return { onSubmit, methods, isSubmiting: methods.formState.isSubmitting, isValidEmail };
 }

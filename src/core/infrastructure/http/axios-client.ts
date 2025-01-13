@@ -119,7 +119,7 @@ class AxiosClient {
   post<T, R = AxiosResponse<ResponseAPI<T>>, D = unknown>(
     url: string,
     data?: D,
-    config?: AxiosRequestConfig<D>
+    config?: AxiosRequestConfig<D>,
   ): Promise<R> {
     return this.axiosInstance.post(url, data, config);
   }

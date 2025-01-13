@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useRegister } from "../../hooks/use-register-form";
 
 const RegisterForm = () => {
-  const { methods, onSubmit, isSubmiting, isValidEmail } = useRegister();
+  const { methods, onSubmit, isSubmiting} = useRegister();
 
   return (
     <>

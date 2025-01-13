@@ -22,7 +22,6 @@ export class EmailService extends BaseHttpService<
                     }
                 }
             );
-            console.log("service " + JSON.stringify(data.status));
             
             return data.status;
         } catch (error: unknown) {

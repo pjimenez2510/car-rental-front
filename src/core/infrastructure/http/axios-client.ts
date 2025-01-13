@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { getErrors } from "@/lib/get-errors";
 
 export interface ResponseAPI<T> {
+  status?: string;
   success: boolean;
   message: string;
   data: T;

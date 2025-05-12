@@ -159,7 +159,7 @@ describe("useAuthOperations", () => {
         ...recoveryData,
         resetPasswordToken: "valid-token",
       });
-      expect(toast.success).toHaveBeenCalledWith("Contraseña actualizada");
+      expect(toast.success).toHaveBeenCalledWith("Contraseña actualizad");
     });
   });
 });

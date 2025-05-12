@@ -18,7 +18,8 @@ class AxiosClient {
   private static axiosClient: AxiosClient;
 
   private static readonly baseUrl: string =
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+    process.env.NEXT_PUBLIC_API_URL ||
+    "https://car-rental-latest-sjbv.onrender.com";
 
   private constructor() {
     this.axiosInstance = axios.create({
@@ -120,7 +121,7 @@ class AxiosClient {
   post<T, R = AxiosResponse<ResponseAPI<T>>, D = unknown>(
     url: string,
     data?: D,
-    config?: AxiosRequestConfig<D>,
+    config?: AxiosRequestConfig<D>
   ): Promise<R> {
     return this.axiosInstance.post(url, data, config);
   }

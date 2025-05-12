@@ -1,0 +1,45 @@
+name: CD - Deploy to Vercel
+
+# Se ejecuta en cada push a la rama `main` o cuando se crea un tag (vX.Y.Z)
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*.*.*'
+
+# Asegura permisos para acceder a los secretos
+permissions:
+  contents: read
+  deployments: write
+
+jobs:
+  deploy-to-vercel:
+    runs-on: ubuntu-latest
+    
+    environment: production
+
+    steps:
+      # 1. Traer el código
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Instalar Node.js (necesario si haces build previo)
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 3. Instalar dependencias y generar el build (opcional)
+      - name: Install & Build
+        run: |
+          npm ci
+          npm run build
+
+      # 4. Desplegar en Vercel
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}       # Token de Vercel :contentReference[oaicite:0]{index=0}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}    # ID de tu organización :contentReference[oaicite:1]{index=1}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }} # ID del proyecto :contentReference[oaicite:2]{index=2}
+          vercel-args: '--prod'                          # Forzar despliegue a producción :contentReference[oaicite:3]{index=3}
